@@ -3,17 +3,21 @@ $("#crearSocio").click(function () {
         cedula: $("#cedula").val(),
         nombre: $("#nombre").val(),
         apellido: $("#apellido").val(),
+        fecha_nacimiento: $("#fecha_nacimiento").val(),
         telefono: $("#telefono").val(),
         direccion: $("#direccion").val(),
+        departamento: $("#departamento").val(),
+        ciudad: $("#ciudad").val(),
         email: $("#email").val(),
         contraseña: $("#contraseña").val(),
-        IngresoMensual: $("#ingreso").val(),
-        profesion: $("#profesion").val(),
-        estado: $("#estado").val(),
-        IntegrantesFamiliares: $("#integrantes").val(),
-        FechaIngreso: $("#fechaIngreso").val(),
-        FechaEgreso: $("#fechaEgreso").val()
+        ingreso_mensual: $("#ingreso_mensual").val(),
+        situacion_laboral: $("#situacion_laboral").val(),
+        estado: "pendiente",
+        integrantes_familiares: $("#integrantes_familiares").val(),
+        fecha_ingreso: $("#fecha_ingreso").val(),
+        fecha_egreso: $("#fecha_egreso").val()
     };
+
 
     $.ajax({
         url: "http://localhost:8000/api/socios",

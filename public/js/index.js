@@ -20,7 +20,7 @@ function cargarSocios() {
                         <td>${socio.nombre}</td>
                         <td>${socio.apellido}</td>
                         <td>${socio.email}</td>
-                        <td>${socio.profesion}</td>
+                        <td>${socio.situacion_laboral}</td>
                     </tr>
                 `);
             });
