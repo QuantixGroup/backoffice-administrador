@@ -52,7 +52,7 @@
         <button id="crearSocio">Crear Socio</button>
     </div>
 
-     <hr>
+    <hr>
 
     <h2>Listado de Socios</h2>
     <table>
@@ -63,13 +63,35 @@
                 <th>Apellido</th>
                 <th>Email</th>
                 <th>Profesión</th>
+                <th>Acciones</th>
+
             </tr>
         </thead>
-        <tbody id="tablaSocios"></tbody>
+        <tbody>
+            @foreach ($socios as $socio)
+                <tr>
+                    <td>{{ $socio['cedula'] }}</td>
+                    <td>{{ $socio['nombre'] }}</td>
+                    <td>{{ $socio['apellido'] }}</td>
+                    <td>{{ $socio['email'] }}</td>
+                    <td>{{ $socio['situacion_laboral'] ?? '-' }}</td>
+                    <td>
+                        @if ($socio['estado'] === 'pendiente')
+                            <button type="button" class="btn btn-success aprobar-btn" data-cedula="{{ $socio['cedula'] }}">
+                                Aprobar
+                            </button>
+                        @else
+                            Aprobado
+                        @endif
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
     </table>
 
     <script src="{{ asset('js/index.js') }}"></script>
     <script src="{{ asset('js/crear.js') }}"></script>
+    <script src="{{ asset('js/aprobarSocio.js') }}"></script>
 </body>
 
 </html>
