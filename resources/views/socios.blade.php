@@ -1,4 +1,4 @@
-@include(view: 'estructura.header')
+@include( 'estructura.header')
 
 @if (session('ok'))
 <div style="color:green">{{ session('ok') }}</div> @endif

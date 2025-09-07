@@ -1,4 +1,4 @@
-@include(view: 'estructura.header')
+@include( 'estructura.header')
 
 <h2>Login de Administrador</h2>
 
