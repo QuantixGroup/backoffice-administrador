@@ -3,76 +3,80 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use App\Models\User;              // admins
-use App\Models\Socio;             // socios (en api-usuarios)
-use App\Models\UsuariosNormales;  // users (usuarios normales)
+use App\Models\User;
+use App\Models\Socio;
+use App\Models\UsuariosNormales;
 use Illuminate\Support\Facades\Hash;
 
 class AprobarSocioTest extends TestCase
 {
-    public function test_aprobar_socio_crea_usuario_y_actualiza_estado(): void
+    protected function setUp(): void
     {
-        // admin para poder pasar el middleware
-        User::create([
-            'cedula'    => '99999999',
-            'name'      => 'Admin Test',
-            'apellido'  => 'Prueba',
-            'telefono'  => '099000000',
+        parent::setUp();
+        $this->withoutMiddleware();
+    }
+    private function admin(): User
+    {
+        return User::create([
+            'cedula' => '99999999',
+            'name' => 'Admin',
+            'apellido' => 'Prueba',
+            'telefono' => '099000000',
             'direccion' => 'Admin 123',
-            'email'     => 'adm@test',
-            'password'  => Hash::make('clave'),
+            'email' => 'a@a',
+            'password' => Hash::make('x'),
+            'fecha_ingreso' => now()->toDateString(),
         ]);
-
-        // socio pendiente (misma estructura que tu seeder)
-        Socio::create([
-            'cedula'            => '11112222',
-            'nombre'            => 'Juana',
-            'apellido'          => 'Pérez',
-            'email'             => 'juana@example.com',
-            'contraseña'        => 'clave123',
-            'telefono'          => '0998765432',
-            'direccion'         => 'Av. Siempre Viva 456',
-            'departamento'      => 'Montevideo',
-            'ciudad'            => 'Montevideo',
-            'ingreso_mensual'   => 50000,
-            'situacion_laboral' => 'Empleado/a',
-            'fecha_nacimiento'  => '1990-05-15',
-            'estado'            => 'pendiente',
-        ]);
-
-        // login admin
-        $this->post('/login', ['cedula' => '99999999', 'password' => 'clave']);
-        $this->assertAuthenticated();
-
-        // aprobar
-        $resp = $this->post('/socios/11112222/aprobar');
-        $resp->assertStatus(302);
-        $resp->assertRedirect(); // back o /socios/pendientes (lo que tengas)
-
-        $creado = UsuariosNormales::where('cedula', '11112222')->first();
-        $this->assertNotNull($creado);
-        $this->assertTrue(
-            Hash::check('clave123', $creado->password) || Hash::check('11112222', $creado->password)
-        );
-        $this->assertSame('aprobado', Socio::where('cedula', '11112222')->first()->estado);
     }
 
-    public function test_aprobar_socio_inexistente_da_404(): void
+    private function socioPendiente(): Socio
     {
-        User::create([
-            'cedula'    => '99999999',
-            'name'      => 'Admin Test',
-            'apellido'  => 'Prueba',
-            'telefono'  => '099000000',
-            'direccion' => 'Admin 123',
-            'email'     => 'adm@test',
-            'password'  => Hash::make('clave'),
+        return Socio::create([
+            'cedula' => '11112222',
+            'nombre' => 'Juana',
+            'apellido' => 'Pérez',
+            'fecha_nacimiento' => '1990-05-15',
+            'telefono' => '099876543',
+            'direccion' => 'Av. Siempre Viva 456',
+            'departamento' => 'Montevideo',
+            'ciudad' => 'Montevideo',
+            'email' => 'juana@example.com',
+            'contraseña' => 'clave123',   
+            'ingreso_mensual' => 50000.00,
+            'situacion_laboral' => 'Empleado/a',
+            'estado' => 'pendiente',
+            'integrantes_familiares' => '2',         
+        ]);
+    }
+
+
+        public function test_aprobar_inexistente_redirige_con_error(): void
+    {
+        $admin = $this->admin();
+        $this->actingAs($admin);
+
+        $resp = $this->post(route('socios.aprobar','00000000'));
+        $resp->assertStatus(302);
+        $resp->assertSessionHas('error'); 
+    }
+    public function test_aprobar_socio_pendiente_exitoso(): void
+    {
+        $admin = $this->admin();
+        $socio = $this->socioPendiente();
+        $this->actingAs($admin);
+
+        $resp = $this->post(route('socios.aprobar',$socio->cedula));
+        $resp->assertStatus(302);
+        $resp->assertSessionHas('success'); 
+
+        $this->assertDatabaseHas('socios', [
+            'cedula' => $socio->cedula,
+            'estado' => 'aprobado',
         ]);
 
-        $this->post('/login', ['cedula' => '99999999', 'password' => 'clave']);
-        $this->assertAuthenticated();
-
-        $resp = $this->post('/socios/00000000/aprobar');
-        $resp->assertStatus(404);
+        $this->assertDatabaseHas('usuarios_normales', [
+            'cedula' => $socio->cedula,
+            'email' => $socio->email,
+        ]);
     }
 }

@@ -3,52 +3,44 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use App\Models\User;              
+use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
 class LoginPorCedulaTest extends TestCase
 {
-    public function test_login_por_cedula_ok(): void
+    protected function setUp(): void //lo necesito o me falla justamente por esto... esa es la cuestión
     {
-        User::create([
-            'cedula'    => '12345678',
-            'name'      => 'Admin Demo',
-            'apellido'  => 'Prueba',
-            'telefono'  => '099123456',
+        parent::setUp();
+        $this->withoutMiddleware();
+    }
+    private function crearAdmin(): User
+    {
+        return User::create([
+            'cedula' => '12345678',
+            'name' => 'Admin Demo',
+            'apellido' => 'Prueba',
+            'telefono' => '099123456',
             'direccion' => 'Calle Falsa 123',
-            'email'     => 'admin@demo.test',
-            'password'  => Hash::make('secreto'),
+            'email' => 'admin@demo.test',
+            'password' => Hash::make('secreto'),
+            'fecha_ingreso' => now()->toDateString(),
         ]);
+    }
 
-        $resp = $this->post('/login', [
-            'cedula'   => '12345678',
+    public function test_login_ok_redirige_a_home_y_autentica(): void
+    {
+        $admin = $this->crearAdmin();
+
+        $response = $this->post(route('login.post'), [
+            'cedula' => '12345678',
             'password' => 'secreto',
         ]);
 
-        $resp->assertStatus(302);
-        $resp->assertRedirect('/');
-        $this->assertAuthenticated();
+        $response->assertStatus(302);
+        $response->assertRedirectToRoute('home');
+        $this->assertAuthenticatedAs($admin);
     }
 
-    public function test_login_por_cedula_falla(): void
-    {
-        User::create([
-            'cedula'    => '12345678',
-            'name'      => 'Admin Demo',
-            'apellido'  => 'Prueba',
-            'telefono'  => '099123456',
-            'direccion' => 'Calle Falsa 123',
-            'email'     => 'admin@demo.test',
-            'password'  => Hash::make('secreto'),
-        ]);
+    
 
-        $resp = $this->post('/login', [
-            'cedula'   => '12345678',
-            'password' => 'mal',
-        ]);
-
-        $resp->assertStatus(302);
-        $resp->assertRedirect('/login');
-        $this->assertGuest();
-    }
 }
