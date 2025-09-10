@@ -1,9 +1,10 @@
 <?php
 
-
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UsuariosNormalesController;
+use App\Models\Socio;
 
 Route::get('/login', function () {
     return view('login');
@@ -14,10 +15,29 @@ Route::post('/login', [UserController::class, 'login'])->name('login.post');
 Route::middleware('auth')->group(function () {
 
     Route::get('/', function () {
-        return view('index');
+        $sociosPendientes = Socio::where('estado', 'pendiente')->get();
+        return view('index', compact('sociosPendientes'));
     })->name('home');
 
-    Route::get('/socios/pendientes', [UsuariosNormalesController::class, 'mostrarPendientes']);
+    Route::get('/perfil', function () {
+        return view('perfil', ['user' => Auth::user()]);
+    })->name('perfil');
+
+    Route::post('/perfil/update', [UserController::class, 'updateProfile'])->name('perfil.update');
+    Route::post('/perfil/upload-image', [UserController::class, 'uploadProfileImage'])->name('perfil.upload-image');
+
+    Route::get('/socios/pendientes', function () {
+        $sociosAprobados = Socio::where('estado', 'aprobado')->get();
+        return view('listado-cooperativistas', compact('sociosAprobados'));
+    })->name('socios.pendientes');
+
+    Route::get('/socios/{cedula}/detalle', [UsuariosNormalesController::class, 'mostrarDetalle'])->name('socios.detalle');
     Route::post('/socios/{cedula}/aprobar', [UsuariosNormalesController::class, 'aprobarPorCedula'])->name('socios.aprobar');
-    Route::get('/logout', [UserController::class, 'logout']);
+    Route::post('/socios/{cedula}/rechazar', [UsuariosNormalesController::class, 'rechazarPorCedula'])->name('socios.rechazar');
+
+    Route::get('/recibos', function () {
+        return view('recibos-pagos');
+    })->name('recibos');
+
+    Route::get('/logout', [UserController::class, 'logout'])->name('logout');
 });
