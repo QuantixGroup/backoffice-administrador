@@ -1,0 +1,12 @@
+@use "variables" as *;
+@use "mixins" as *;
+
+.recibo-row {
+    @include table-row-selectable;
+}
+
+.action-buttons {
+    padding: 1rem 1.5rem;
+    background-color: $bg-color-secondary;
+    border-top: 1px solid $bg-color-tertiary;
+}

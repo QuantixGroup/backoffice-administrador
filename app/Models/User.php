@@ -2,12 +2,25 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 
+/**
+ * @property int $id
+ * @property string $name
+ * @property string $apellido
+ * @property string $cedula
+ * @property string $email
+ * @property string $telefono
+ * @property string $direccion
+ * @property string $fecha_nacimiento
+ * @property string $fecha_ingreso
+ * @property string $fecha_egreso
+ * @property string|null $profile_image
+ * @property string $password
+ */
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;

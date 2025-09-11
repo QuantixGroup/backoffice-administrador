@@ -33,6 +33,23 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+function togglePassword() {
+    const passwordInput = document.getElementById("password");
+    const toggleIcon = document.getElementById("toggleIcon");
+
+    if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        toggleIcon.classList.remove("bi-eye");
+        toggleIcon.classList.add("bi-eye-slash");
+    } else {
+        passwordInput.type = "password";
+        toggleIcon.classList.remove("bi-eye-slash");
+        toggleIcon.classList.add("bi-eye");
+    }
+}
+
+window.togglePassword = togglePassword;
+
 function showForgotPasswordModal() {
     const modalHTML = `
         <div class="modal fade" id="forgotPasswordModal" tabindex="-1" aria-labelledby="forgotPasswordModalLabel" aria-hidden="true">
@@ -84,8 +101,6 @@ function sendRecoveryEmail() {
         return;
     }
 
-    // Aquí puedes enviar la petición AJAX al servidor
-    // Por ahora simularemos el envío
     const sendButton = document.querySelector(
         "#forgotPasswordModal .btn-primary"
     );

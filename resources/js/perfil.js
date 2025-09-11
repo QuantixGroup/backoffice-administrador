@@ -1,15 +1,20 @@
-// Desactivar auto-descubrimiento de Dropzone
-window.Dropzone = false;
+window.Dropzone = window.Dropzone || {};
+Dropzone.autoDiscover = false;
 
 document.addEventListener("DOMContentLoaded", function () {
-    // Configurar Dropzone
+    console.log("DOM loaded, initializing profile page...");
+
     const dropzoneElement = document.getElementById("profile-image-dropzone");
     const uploadButton = document.querySelector(".image-upload-button");
     let profileImageDropzone = null;
 
-    // Función para inicializar Dropzone
+    console.log("Dropzone element:", dropzoneElement);
+    console.log("Upload button:", uploadButton);
+
     function initializeDropzone() {
         if (dropzoneElement && !profileImageDropzone) {
+            console.log("Initializing Dropzone...");
+
             profileImageDropzone = new Dropzone("#profile-image-dropzone", {
                 url: "/perfil/upload-image",
                 paramName: "profile_image",
@@ -18,6 +23,21 @@ document.addEventListener("DOMContentLoaded", function () {
                 addRemoveLinks: true,
                 autoProcessQueue: true,
                 clickable: true,
+                createImageThumbnails: true,
+                previewTemplate: `
+                    <div class="dz-preview dz-file-preview">
+                        <div class="dz-image"><img data-dz-thumbnail /></div>
+                        <div class="dz-details">
+                            <div class="dz-size"><span data-dz-size></span></div>
+                            <div class="dz-filename"><span data-dz-name></span></div>
+                        </div>
+                        <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
+                        <div class="dz-error-message"><span data-dz-errormessage></span></div>
+                        <div class="dz-success-mark">✓</div>
+                        <div class="dz-error-mark">✗</div>
+                        <div class="dz-remove" data-dz-remove>Eliminar</div>
+                    </div>
+                `,
                 dictDefaultMessage: "Haz clic o arrastra una imagen aquí",
                 dictRemoveFile: "Eliminar",
                 dictCancelUpload: "Cancelar",
@@ -34,6 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 },
                 init: function () {
                     const dzInstance = this;
+                    console.log("Dropzone initialized successfully");
 
                     this.on("success", function (file, response) {
                         console.log("Upload success:", response);
@@ -48,15 +69,19 @@ document.addEventListener("DOMContentLoaded", function () {
                                 "success"
                             );
 
-                            // Ocultar dropzone después de subir
                             dropzoneElement.style.display = "none";
                             uploadButton.innerHTML =
                                 '<i class="fas fa-camera me-2"></i>Cambiar Imagen';
 
-                            // Limpiar archivos del dropzone
                             setTimeout(() => {
                                 dzInstance.removeAllFiles();
                             }, 2000);
+                        } else {
+                            console.error("Upload failed:", response);
+                            showNotification(
+                                response.message || "Error al subir la imagen",
+                                "danger"
+                            );
                         }
                     });
 
@@ -73,6 +98,20 @@ document.addEventListener("DOMContentLoaded", function () {
                         );
                     });
 
+                    this.on("sending", function (file, xhr, formData) {
+                        console.log("Sending file:", file.name);
+                        console.log("FormData:", formData);
+                    });
+
+                    this.on("addedfile", function (file) {
+                        console.log(
+                            "File added:",
+                            file.name,
+                            file.size,
+                            file.type
+                        );
+                    });
+
                     this.on("removedfile", function (file) {
                         console.log("File removed:", file.name);
                     });
@@ -85,35 +124,47 @@ document.addEventListener("DOMContentLoaded", function () {
                         );
                     });
 
-                    this.on("addedfile", function (file) {
-                        console.log("File added:", file.name);
+                    this.on("dragenter", function () {
+                        console.log("Drag enter");
+                        dropzoneElement.classList.add("dz-drag-hover");
                     });
 
-                    this.on("sending", function (file, xhr, formData) {
-                        console.log("Sending file:", file.name);
+                    this.on("dragleave", function () {
+                        console.log("Drag leave");
+                        dropzoneElement.classList.remove("dz-drag-hover");
+                    });
+
+                    this.on("drop", function () {
+                        console.log("File dropped");
+                        dropzoneElement.classList.remove("dz-drag-hover");
                     });
                 },
             });
         }
     }
 
-    // Manejar clic en botón de subir imagen
     if (uploadButton) {
         uploadButton.addEventListener("click", function (e) {
             e.preventDefault();
+            e.stopPropagation();
             console.log("Upload button clicked");
 
             if (
                 dropzoneElement.style.display === "none" ||
                 !dropzoneElement.style.display
             ) {
-                dropzoneElement.style.display = "block";
-                this.innerHTML = '<i class="fas fa-times me-2"></i>Cancelar';
-
-                // Inicializar Dropzone cuando se muestra
                 if (!profileImageDropzone) {
                     initializeDropzone();
                 }
+
+                dropzoneElement.style.display = "block";
+                this.innerHTML = '<i class="fas fa-times me-2"></i>Cancelar';
+
+                setTimeout(() => {
+                    if (profileImageDropzone) {
+                        profileImageDropzone.enable();
+                    }
+                }, 100);
             } else {
                 dropzoneElement.style.display = "none";
                 this.innerHTML =
@@ -122,7 +173,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Funcionalidad de editar perfil
     const editButton = document.getElementById("edit-profile-btn");
     const saveButton = document.getElementById("save-profile-btn");
     const cancelButton = document.getElementById("cancel-profile-btn");
@@ -154,7 +204,6 @@ document.addEventListener("DOMContentLoaded", function () {
             saveButton.style.display = "none";
             cancelButton.style.display = "none";
 
-            // Resetear valores originales
             formInputs.forEach((input) => {
                 const originalValue = input.getAttribute("data-original-value");
                 if (originalValue !== null) {
@@ -224,13 +273,10 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-// Función auxiliar para mostrar notificaciones
 function showNotification(message, type) {
-    // Crear la notificación con el mismo estilo que en socio-detalle
     const notification = document.createElement("div");
     notification.className = "success-notification";
 
-    // Estilos inline para la notificación (usando el mismo estilo verde)
     notification.style.cssText = `
         position: fixed;
         top: 20px;
@@ -247,7 +293,6 @@ function showNotification(message, type) {
         animation: slideInRight 0.3s ease-out;
     `;
 
-    // Agregar icono y mensaje
     notification.innerHTML = `
         <i class="fas fa-check-circle" style="margin-right: 0.5rem; font-size: 1.2rem;"></i>
         <span>${message}</span>
@@ -255,7 +300,6 @@ function showNotification(message, type) {
 
     document.body.appendChild(notification);
 
-    // Remover después de 4 segundos
     setTimeout(() => {
         if (notification.parentNode) {
             notification.remove();

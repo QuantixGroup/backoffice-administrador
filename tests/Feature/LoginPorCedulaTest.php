@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Hash;
 
 class LoginPorCedulaTest extends TestCase
 {
-    protected function setUp(): void //lo necesito o me falla justamente por esto... esa es la cuestión
+    protected function setUp(): void
     {
         parent::setUp();
         $this->withoutMiddleware();
@@ -41,6 +41,6 @@ class LoginPorCedulaTest extends TestCase
         $this->assertAuthenticatedAs($admin);
     }
 
-    
+
 
 }

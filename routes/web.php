@@ -16,12 +16,10 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/', function () {
         $sociosPendientes = Socio::where('estado', 'pendiente')->get();
-        return view('index', compact('sociosPendientes'));
+        return view('inicio', compact('sociosPendientes'));
     })->name('home');
 
-    Route::get('/perfil', function () {
-        return view('perfil', ['user' => Auth::user()]);
-    })->name('perfil');
+    Route::get('/perfil', [UserController::class, 'showProfile'])->name('perfil');
 
     Route::post('/perfil/update', [UserController::class, 'updateProfile'])->name('perfil.update');
     Route::post('/perfil/upload-image', [UserController::class, 'uploadProfileImage'])->name('perfil.upload-image');
@@ -36,7 +34,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/socios/{cedula}/rechazar', [UsuariosNormalesController::class, 'rechazarPorCedula'])->name('socios.rechazar');
 
     Route::get('/recibos', function () {
-        return view('recibos-pagos');
+        $sociosAprobados = Socio::where('estado', 'aprobado')->get();
+        return view('recibos-pagos', compact('sociosAprobados'));
     })->name('recibos');
 
     Route::get('/logout', [UserController::class, 'logout'])->name('logout');

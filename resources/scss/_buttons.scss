@@ -1,0 +1,96 @@
+@use "variables" as *;
+@use "mixins" as *;
+
+%btn-base {
+    font-family: $font-button;
+    font-weight: 200;
+    color: $text-color-secondary;
+    background-color: $bg-color-primary;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.btn-login {
+    @extend %btn-base;
+    font-size: 1.2rem;
+
+    &:hover {
+        @include btn-hover-effect;
+    }
+}
+
+.btn-toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: $text-color-primary;
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease;
+
+    &:hover {
+        @include btn-hover-effect;
+    }
+
+    &:focus {
+        outline: none;
+        color: $text-color-primary;
+    }
+
+    i {
+        pointer-events: none;
+    }
+}
+
+.btn-enviar,
+.btn-cerrar {
+    @extend %btn-base;
+    font-size: 1rem;
+
+    &:hover {
+        @include btn-hover-effect;
+    }
+}
+
+.btn-abrir,
+.btn-ver-recibo {
+    @extend %btn-base;
+    border: none;
+    padding: 0.75rem 2rem;
+    border-radius: 0.25rem;
+    font-weight: 500;
+}
+
+.btn-abrir:hover:not(:disabled),
+.btn-ver-recibo:hover:not(:disabled) {
+    @include btn-hover-effect;
+}
+
+.btn-abrir:disabled,
+.btn-ver-recibo:disabled {
+    background-color: $bg-color-default;
+    color: $text-color-secondary;
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.action-buttons {
+    padding: 1rem 1.5rem;
+    background-color: $bg-color-tertiary;
+    border-top: 1px solid $bg-color-secondary;
+    border-bottom-left-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+}

@@ -1,4 +1,12 @@
 @use 'variables' as *;
+@use 'mixins' as *;
+@use 'global';
+@use 'buttons';
 @use '../../node_modules/bootstrap/scss/bootstrap' as *;
 @use 'login';
 @use 'perfil';
+@use 'body';
+@use 'sidebar';
+@use 'socio-detalle';
+@use 'listado-cooperativistas';
+@use 'recibos-pagos';

@@ -48,7 +48,7 @@ class UserController extends Controller
         try {
             $user = Auth::user();
 
-            if ($user instanceof \App\Models\User) {
+            if ($user instanceof User) {
                 $user->name = $request->nombre;
                 $user->apellido = $request->apellido;
                 $user->email = $request->email;
@@ -117,5 +117,16 @@ class UserController extends Controller
                 'message' => 'Error al subir la imagen: ' . $e->getMessage()
             ], 500);
         }
+    }
+
+    public function showProfile()
+    {
+        $user = Auth::user();
+        $profileImageUrl = $user->profile_image ? Storage::url($user->profile_image) : asset('img/admin-profile.jpg');
+
+        return view('perfil', [
+            'user' => $user,
+            'profileImageUrl' => $profileImageUrl
+        ]);
     }
 }

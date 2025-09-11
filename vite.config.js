@@ -13,4 +13,16 @@ export default defineConfig({
     server: {
         cors: true,
     },
+    css: {
+        preprocessorOptions: {
+            scss: {
+                quietDeps: true,
+                silenceDeprecations: [
+                    "color-functions",
+                    "global-builtin",
+                    "import",
+                ],
+            },
+        },
+    },
 });

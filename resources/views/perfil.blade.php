@@ -2,25 +2,9 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
-    @include('partials.head')
+    @include('partials.head', ['title' => 'Mi Perfil - COVIMT 17'])
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
-
-    <style>
-        /* Success notification styles */
-        @keyframes slideInRight {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-    </style>
-</head>
 
 <body>
     @include('partials.sidebar')
@@ -29,7 +13,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
-                    <h2 class="mb-4">Perfil de {{ $user->name ?? 'Administrador' }}</h2>
+                    <h2 class="mb-4 text-center">Perfil de {{ $user->name ?? 'Administrador' }}</h2>
                 </div>
             </div>
 
@@ -97,13 +81,13 @@
                                 <button type="button" id="edit-profile-btn" class="btn btn-primary">
                                     <i class="fas fa-edit me-2"></i>Editar Perfil
                                 </button>
-                                <button type="button" id="save-profile-btn" class="btn btn-success"
-                                    style="display: none;">
-                                    <i class="fas fa-save me-2"></i>Guardar
-                                </button>
                                 <button type="button" id="cancel-profile-btn" class="btn btn-secondary"
                                     style="display: none;">
                                     <i class="fas fa-times me-2"></i>Cancelar
+                                </button>
+                                <button type="button" id="save-profile-btn" class="btn btn-success"
+                                    style="display: none;">
+                                    <i class="fas fa-save me-2"></i>Guardar
                                 </button>
                             </div>
                         </form>
@@ -113,8 +97,8 @@
                 <div class="col-lg-4">
                     <div class="profile-container">
                         <div class="profile-image-section">
-                            <img id="current-profile-image" src="{{ asset('img/admin-profile.jpg') }}"
-                                alt="Foto de perfil" class="current-profile-image"
+                            <img id="current-profile-image" src="{{ $profileImageUrl }}" alt="Foto de perfil"
+                                class="current-profile-image"
                                 onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0xMDAgNzBDMTEzLjgwNyA3MCAxMjUgNTguODA3IDEyNSA0NUM1IDMxLjE5MyA0My44MDcgMjAgMzBTMzEuMTkzIDEwIDQ1IDEwUzEwMCAzMS4xOTMgMTAwIDQ1UzEwOCA4MS4xOTMgMTAwIDcwWk0xNTAgMTQwQzE1MCA5NS44MTcgMTI3LjU4MyA4NSAxMDAgODVTNTAgOTUuODE3IDUwIDE0MEg1MCIgZmlsbD0iIzlDQTNBRiIvPgo8L3N2Zz4='">
 
                             <button type="button" class="image-upload-button"
@@ -126,7 +110,7 @@
                                 <div class="dz-message">
                                     <i class="fas fa-cloud-upload-alt fa-3x mb-3"></i>
                                     <p>Arrastra una imagen aquí o haz clic para seleccionar</p>
-                                    <small>Tamaño máximo: 2MB | Formatos: JPG, PNG, GIF</small>
+                                    <small>Tamaño máximo: 2MB | Formatos: JPG, PNG</small>
                                 </div>
                             </div>
                         </div>

@@ -18,13 +18,16 @@ class UsuariosNormalesController extends Controller
         return view('socios', compact('sociosPendientes'));
     }
 
-    public function aprobarPorCedula(string $cedula)
+    public function aprobarPorCedula(string $cedula, Request $request)
     {
         $socioEncontrado = Socio::where('cedula', $cedula)
             ->where('estado', 'pendiente')
             ->first();
 
         if ($socioEncontrado === null) {
+            if ($request->expectsJson()) {
+                return response()->json(['error' => 'Socio no encontrado o ya aprobado'], 404);
+            }
             return redirect()->route('home')->with('error', 'Socio no encontrado o ya aprobado');
         }
 
@@ -41,6 +44,23 @@ class UsuariosNormalesController extends Controller
 
         $socioEncontrado->estado = 'aprobado';
         $socioEncontrado->save();
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Usuario aceptado con éxito',
+                'socio' => [
+                    'nombre' => $socioEncontrado->nombre,
+                    'apellido' => $socioEncontrado->apellido,
+                    'cedula' => $socioEncontrado->cedula,
+                    'telefono' => $socioEncontrado->telefono,
+                    'email' => $socioEncontrado->email,
+                    'estado_pago_badge' => $socioEncontrado->estado_pago_badge,
+                    'horas_trabajadas_badge' => $socioEncontrado->horas_trabajadas_badge,
+                    'updated_at' => $socioEncontrado->updated_at->format('d/m/Y H:i')
+                ]
+            ]);
+        }
 
         return redirect()->route('home')->with('ok', 'Usuario aceptado con éxito');
     }
