@@ -1,0 +1,50 @@
+@use "variables" as *;
+@use "mixins" as *;
+
+.main-content {
+    margin-left: 250px;
+    padding: 2rem;
+    background-color: $bg-color-secondary;
+    min-height: 100vh;
+}
+
+.table-container {
+    background-color: $bg-color-secondary;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.table-header {
+    background-color: $bg-color-primary;
+    color: $text-color-secondary;
+    padding: 1rem 1.5rem;
+    font-weight: 600;
+    font-size: 1.5rem;
+}
+
+.table th {
+    background-color: $bg-color-secondary;
+    border-bottom: 2px solid $bg-color-tertiary;
+    font-weight: 600;
+    padding: 1rem 0.75rem;
+}
+
+.table td {
+    padding: 1rem 0.75rem;
+    vertical-align: middle;
+}
+
+.table tbody tr {
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.table tbody tr:hover {
+    background-color: $bg-color-tertiary;
+}
+
+.table tbody tr.selected {
+    background-color: $bg-color-success;
+    border-left: 4px solid $bg-color-primary;
+}

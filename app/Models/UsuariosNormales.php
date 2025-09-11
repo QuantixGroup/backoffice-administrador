@@ -8,7 +8,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class UsuariosNormales extends Model
 {
-    use HasFactory;
-    use SoftDeletes;
-     protected $table = 'users';
+    use HasFactory, SoftDeletes;
+
+    protected $table = 'users';
+
+    protected $fillable = [
+        'name',
+        'cedula',
+        'email',
+        'password',
+    ];
 }

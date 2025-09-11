@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'api_cooperativista' => [
+        'url' => env('API_COOPERATIVISTA_URL'),
+        'token' => env('API_COOPERATIVISTA_TOKEN'),
+    ],
+
 ];

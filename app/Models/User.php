@@ -2,26 +2,33 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 
+/**
+ * @property int $id
+ * @property string $name
+ * @property string $apellido
+ * @property string $cedula
+ * @property string $email
+ * @property string $telefono
+ * @property string $direccion
+ * @property string $fecha_nacimiento
+ * @property string $fecha_ingreso
+ * @property string $fecha_egreso
+ * @property string|null $profile_image
+ * @property string $password
+ */
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
     protected $table = 'admins';
-        protected $fillable = [
+    protected $fillable = [
         'name',
-        'cedula',         
+        'cedula',
         'email',
         'password',
         'apellido',
@@ -29,23 +36,15 @@ class User extends Authenticatable
         'direccion',
         'fecha_ingreso',
         'fecha_egreso',
+        'fecha_nacimiento',
+        'profile_image',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
@@ -54,9 +53,6 @@ class User extends Authenticatable
         ];
     }
 
-    /**
-     * Get the user's initials
-     */
     public function initials(): string
     {
         return Str::of($this->name)

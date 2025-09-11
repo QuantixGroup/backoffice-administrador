@@ -1,0 +1,97 @@
+@use "variables" as *;
+@use "mixins" as *;
+
+.body-background {
+    background-image: url('../../public/img/fondoContruccion.avif');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    min-height: 100vh;
+    width: 100%;
+    position: relative;
+
+    @media (max-width: 576px) {
+        background-size: cover;
+        background-attachment: scroll;
+    }
+}
+
+main {
+    position: relative;
+    z-index: 2;
+}
+
+.logo-container {
+    text-align: center;
+    margin-bottom: 2rem;
+
+    img {
+        max-width: 12rem;
+        height: auto;
+        margin-bottom: 1rem;
+
+        @media (max-width: 576px) {
+            max-width: 10rem;
+        }
+    }
+}
+
+h1.logo-text {
+    font-family: $font-title;
+    color: $text-color-secondary;
+    font-size: 2rem;
+    font-weight: bold;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+
+    @media (max-width: 576px) {
+        font-size: 1.5rem;
+    }
+}
+
+.login-card {
+    background-color: $bg-color-secondary;
+    border-radius: 1.5rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    padding: 2rem;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+
+    @media (max-width: 576px) {
+        padding: 1.5rem;
+        border-radius: 1rem;
+    }
+}
+
+.login-title {
+    font-family: $font-title;
+    color: $text-color-primary;
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+
+    @media (max-width: 576px) {
+        font-size: 1.6rem;
+    }
+}
+
+a,
+.form-check {
+    display: inline-block;
+    margin-top: 1rem;
+    font-family: $font-text;
+    color: $text-color-primary;
+    font-weight: 500;
+
+    &:hover {
+        text-decoration: underline;
+        cursor: pointer;
+    }
+}
+
+.form-label {
+    font-family: $font-text;
+    color: $text-color-primary;
+    font-weight: 500;
+}
