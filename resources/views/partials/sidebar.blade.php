@@ -3,25 +3,27 @@
         <nav class="nav flex-column">
             <a class="nav-link {{ request()->routeIs('home') || request()->routeIs('socios.detalle') ? 'active' : '' }}"
                 href="{{ route('home') }}">
-                <i class="fas fa-home"></i>INICIO
+                <i class="fa-solid fa-house-chimney"></i>INICIO
             </a>
             <a class="nav-link {{ request()->routeIs('perfil') ? 'active' : '' }}" href="{{ route('perfil') }}">
-                <i class="fas fa-user"></i>MI PERFIL
+                <i class="fa-solid fa-user"></i>MI PERFIL
             </a>
             <a class="nav-link {{ request()->routeIs('socios.pendientes') ? 'active' : '' }}"
                 href="{{ route('socios.pendientes') }}">
-                <i class="fas fa-users"></i>COOPERATIVISTAS
+                <i class="fa-solid fa-user-group"></i>COOPERATIVISTAS
             </a>
-            <a class="nav-link {{ request()->routeIs('recibos') ? 'active' : '' }}" href="{{ route('recibos') }}">
-                <i class="fas fa-file-invoice"></i>RECIBOS DE PAGO
+            <a class="nav-link {{ request()->routeIs('recibos.*') ? 'active' : '' }}"
+                href="{{ route('recibos.pagos') }}">
+                <i class="fa-solid fa-folder-open"></i>RECIBOS DE PAGO
             </a>
-            @if(request()->routeIs('socios.detalle'))
-                <a class="nav-link btn-back-sidebar" href="{{ route('home') }}">
-                    <i class="fas fa-arrow-left"></i>VOLVER
+            @if(request()->routeIs('socios.detalle') || request()->routeIs('recibos.detalle'))
+                <a class="nav-link btn-back-sidebar"
+                    href="{{ request()->routeIs('recibos.detalle') ? route('recibos.pagos') : route('home') }}">
+                    <i class="fa-solid fa-arrow-left"></i>VOLVER
                 </a>
             @else
                 <a class="nav-link" href="{{ route('logout') }}">
-                    <i class="fas fa-sign-out-alt"></i>SALIR
+                    <i class="fa-solid fa-sign-out-alt"></i>SALIR
                 </a>
             @endif
         </nav>

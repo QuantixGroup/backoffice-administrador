@@ -8,12 +8,8 @@ use Illuminate\Database\Seeder;
 
 class SociosTableSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        // Verificar si ya existe para evitar duplicados
         if (!Socio::where('cedula', '11112222')->exists()) {
             Socio::create([
                 'cedula' => '11112222',

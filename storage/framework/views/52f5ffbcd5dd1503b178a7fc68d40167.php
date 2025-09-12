@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="<?php echo e(str_replace('_', '-', app()->getLocale())); ?>">
 
 <head>
-    @include('partials.head', ['title' => 'Recibos de Pago - COVIMT 17'])
-    <meta name="recibos-detalle-url" content="{{ route('recibos.detalle') }}">
+    <?php echo $__env->make('partials.head', ['title' => 'Recibos de Pago - COVIMT 17'], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+    <meta name="recibos-detalle-url" content="<?php echo e(route('recibos.detalle')); ?>">
 </head>
 
 <body>
-    @include('partials.sidebar')
+    <?php echo $__env->make('partials.sidebar', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
     <div class="main-content">
         <div class="container-fluid">
@@ -32,25 +32,27 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse($sociosAprobados as $socio)
-                                    <tr class="recibo-row" data-cooperativista="{{ $socio->cedula ?? 'N/A' }}">
-                                        <td>{{ $socio->nombre ?? 'N/A' }}</td>
-                                        <td>{{ $socio->apellido ?? 'N/A' }}</td>
-                                        <td>{{ $socio->cedula ?? 'N/A' }}</td>
-                                        <td>{{ $socio->telefono ?? 'N/A' }}</td>
-                                        <td>{{ $socio->email ?? 'N/A' }}</td>
+                                <?php $__empty_1 = true; $__currentLoopData = $sociosAprobados; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $socio): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                    <tr class="recibo-row" data-cooperativista="<?php echo e($socio->cedula ?? 'N/A'); ?>">
+                                        <td><?php echo e($socio->nombre ?? 'N/A'); ?></td>
+                                        <td><?php echo e($socio->apellido ?? 'N/A'); ?></td>
+                                        <td><?php echo e($socio->cedula ?? 'N/A'); ?></td>
+                                        <td><?php echo e($socio->telefono ?? 'N/A'); ?></td>
+                                        <td><?php echo e($socio->email ?? 'N/A'); ?></td>
                                         <td>
-                                            {!! $socio->horas_trabajadas_badge !!}
+                                            <?php echo $socio->horas_trabajadas_badge; ?>
+
                                         </td>
                                         <td>
-                                            {!! $socio->estado_pago_badge !!}
+                                            <?php echo $socio->estado_pago_badge; ?>
+
                                         </td>
                                     </tr>
-                                @empty
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                     <tr>
                                         <td colspan="7" class="text-center">No hay cooperativistas aprobados</td>
                                     </tr>
-                                @endforelse
+                                <?php endif; ?>
                             </tbody>
                         </table>
                     </div>
@@ -68,8 +70,8 @@
         </div>
     </div>
 
-    @include('partials.footer')
+    <?php echo $__env->make('partials.footer', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
 </body>
 
-</html>
+</html><?php /**PATH C:\Users\sscri\OneDrive\Programacion y Desarrollo Web\Visual Studio Code\2- Proyectos en Curso\UTU\proyectoFinal\backoffice-administrador\resources\views/recibos-pagos.blade.php ENDPATH**/ ?>

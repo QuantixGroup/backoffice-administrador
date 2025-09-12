@@ -1,0 +1,33 @@
+@use "variables" as *;
+@use "mixins" as *;
+
+.footer-container {
+    font-family: $font-footer;
+    font-weight: 400;
+    line-height: 1.6;
+    font-size: 1rem;
+    background-color: $bg-color-secondary;
+    color: $text-color-primary;
+    padding: 1.5rem 0;
+    margin-top: auto;
+
+    p {
+        margin: 0;
+        line-height: 1.4;
+    }
+
+    @media (max-width: 768px) {
+        padding: 1rem 0;
+        font-size: 0.85rem;
+    }
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.main-content {
+    flex: 1;
+}

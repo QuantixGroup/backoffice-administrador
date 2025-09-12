@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UsuariosNormalesController;
+use App\Http\Controllers\RecibosController;
 use App\Models\Socio;
 
 Route::get('/login', function () {
@@ -33,10 +34,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/socios/{cedula}/aprobar', [UsuariosNormalesController::class, 'aprobarPorCedula'])->name('socios.aprobar');
     Route::post('/socios/{cedula}/rechazar', [UsuariosNormalesController::class, 'rechazarPorCedula'])->name('socios.rechazar');
 
-    Route::get('/recibos', function () {
-        $sociosAprobados = Socio::where('estado', 'aprobado')->get();
-        return view('recibos-pagos', compact('sociosAprobados'));
-    })->name('recibos');
+    Route::get('/recibos', [RecibosController::class, 'index'])->name('recibos.pagos');
+    Route::get('/recibos/detalle', [RecibosController::class, 'detalle'])->name('recibos.detalle');
 
     Route::get('/logout', [UserController::class, 'logout'])->name('logout');
 });

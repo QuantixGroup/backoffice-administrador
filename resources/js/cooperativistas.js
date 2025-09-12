@@ -24,41 +24,18 @@ class CooperativistasManager {
 
     bindRecibosEvents() {
         const table = document.querySelector("#recibosTable");
-        const btnAbrir = document.getElementById("abrirReciboBtn");
 
         if (!table) return;
 
-        let cooperativistaSeleccionado = null;
+        this.recibosSelector = new TableRowSelector(
+            "#recibosTable",
+            "abrirReciboBtn",
+            "cooperativista"
+        );
 
-        table.addEventListener("click", function (e) {
-            const row = e.target.closest("tr");
-
-            if (row && row.parentNode.tagName.toLowerCase() === "tbody") {
-                table.querySelectorAll("tbody tr").forEach((tr) => {
-                    tr.classList.remove("table-primary", "selected");
-                });
-
-                row.classList.add("table-primary", "selected");
-
-                cooperativistaSeleccionado = row.getAttribute(
-                    "data-cooperativista"
-                );
-
-                if (btnAbrir && cooperativistaSeleccionado) {
-                    btnAbrir.disabled = false;
-                }
-            }
-        });
-
-        window.abrirRecibo = function () {
-            if (cooperativistaSeleccionado) {
-                alert(
-                    "Abriendo recibos para cooperativista: " +
-                        cooperativistaSeleccionado
-                );
-            } else {
-                alert("Por favor, selecciona un cooperativista primero");
-            }
+        window.abrirRecibo = () => {
+            const selectedValue = this.recibosSelector?.getSelectedValue();
+            openRecibo(selectedValue, null, "/recibos/detalle");
         };
     }
 

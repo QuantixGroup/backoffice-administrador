@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="<?php echo e(str_replace('_', '-', app()->getLocale())); ?>">
 
 <head>
-  @include('partials.head', ['title' => 'Iniciar Sesión - COVIMT 17'])
+  <?php echo $__env->make('partials.head', ['title' => 'Iniciar Sesión - COVIMT 17'], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 </head>
 
 <body class="body-background">
@@ -11,15 +11,15 @@
       <div class="row justify-content-center">
         <div class="col-md-8 col-lg-6">
           <div class="logo-container">
-            <img src="{{ asset('img/logo_cooperativa.svg') }}" alt="Logo">
+            <img src="<?php echo e(asset('img/logo_cooperativa.svg')); ?>" alt="Logo">
             <h1 class="logo-text">COVIMT 17</h1>
           </div>
           <div class="login-card">
-            @if ($errors->any())
-              <div class="alert alert-danger text-center">{{ $errors->first() }}</div>
-            @endif
-            <form method="POST" action="{{ route('login.post') }}">
-              @csrf
+            <?php if($errors->any()): ?>
+              <div class="alert alert-danger text-center"><?php echo e($errors->first()); ?></div>
+            <?php endif; ?>
+            <form method="POST" action="<?php echo e(route('login.post')); ?>">
+              <?php echo csrf_field(); ?>
               <div class="mb-3">
                 <label for="cedula" class="form-label">Usuario (CI)</label>
                 <input type="text" name="cedula" id="cedula" class="form-control" placeholder="Ingrese su Documento">
@@ -51,7 +51,7 @@
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  @vite(['resources/js/app.js'])
+  <?php echo app('Illuminate\Foundation\Vite')(['resources/js/app.js']); ?>
 </body>
 
-</html>
+</html><?php /**PATH C:\Users\sscri\OneDrive\Programacion y Desarrollo Web\Visual Studio Code\2- Proyectos en Curso\UTU\proyectoFinal\backoffice-administrador\resources\views/login.blade.php ENDPATH**/ ?>

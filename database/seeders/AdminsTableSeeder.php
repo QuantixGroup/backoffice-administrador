@@ -8,15 +8,11 @@ use Illuminate\Database\Seeder;
 
 class AdminsTableSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-
-
-        User::create([
-            'cedula' => '12345678',
+        User::firstOrCreate([
+            'cedula' => '12345678'
+        ], [
             'name' => 'Admin Demo',
             'apellido' => 'Prueba',
             'telefono' => '099123456',
@@ -25,7 +21,5 @@ class AdminsTableSeeder extends Seeder
             'fecha_ingreso' => now(),
             'password' => Hash::make('secreto'),
         ]);
-
-
     }
 }

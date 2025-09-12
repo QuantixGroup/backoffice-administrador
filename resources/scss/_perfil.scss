@@ -1,6 +1,13 @@
 @use 'variables' as *;
 @use 'mixins' as *;
 
+.col-form-label {
+    font-family: $font-subtitle;
+    font-weight: 600;
+    color: $text-color-primary;
+    margin-bottom: 0.5rem;
+}
+
 .profile-container {
     @include container-white;
     margin-top: 1rem;
@@ -62,10 +69,10 @@
         border-radius: 0.375rem;
         padding: 0.75rem;
         font-size: 1rem;
-        background-color: #f8f9fa;
+        background-color: $bg-color-label;
 
         &:disabled {
-            background-color: #f8f9fa;
+            background-color: $bg-color-label;
             border-color: #e9ecef;
             color: #6c757d;
         }
@@ -97,7 +104,7 @@
         cursor: pointer;
         transition: all 0.3s ease;
 
-        &.btn-primary {
+        &.btn-edit-profile {
             background-color: $bg-color-primary;
             color: $bg-color-secondary;
 
@@ -112,7 +119,7 @@
             }
         }
 
-        &.btn-secondary {
+        &.btn-cancel {
             background-color: $bg-color-error;
             color: white;
 

@@ -18,6 +18,13 @@ document.addEventListener("DOMContentLoaded", function () {
             abrirBtn.disabled = false;
         });
     });
+
+    const successMessage = document.querySelector(
+        'meta[name="success-message"]'
+    );
+    if (successMessage) {
+        showSuccessNotification(successMessage.getAttribute("content"));
+    }
 });
 
 function abrirDetalle() {
@@ -26,17 +33,4 @@ function abrirDetalle() {
     }
 }
 
-function showSuccessNotification(message) {
-    const notification = document.getElementById("successNotification");
-    const messageSpan = document.getElementById("successMessage");
-
-    messageSpan.textContent = message;
-    notification.classList.add("show");
-
-    setTimeout(function () {
-        notification.classList.remove("show");
-    }, 4000);
-}
-
 window.abrirDetalle = abrirDetalle;
-window.showSuccessNotification = showSuccessNotification;

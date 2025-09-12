@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             profileImg.src = response.image_url;
 
                             showNotification(
-                                "¡Éxito! Imagen de perfil actualizada correctamente.",
+                                "Imagen de perfil actualizada correctamente.",
                                 "success"
                             );
 

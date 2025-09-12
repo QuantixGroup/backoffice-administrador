@@ -31,6 +31,15 @@ window.hideRejectModal = hideRejectModal;
 window.approveUser = approveUser;
 window.rejectUser = rejectUser;
 
+document.addEventListener("DOMContentLoaded", function () {
+    const successMessage = document.querySelector(
+        'meta[name="success-message"]'
+    );
+    if (successMessage) {
+        showSuccessNotification(successMessage.getAttribute("content"));
+    }
+});
+
 window.onclick = function (event) {
     const approveModal = document.getElementById("approveModal");
     const rejectModal = document.getElementById("rejectModal");
@@ -42,17 +51,3 @@ window.onclick = function (event) {
         hideRejectModal();
     }
 };
-
-function showSuccessNotification(message) {
-    const notification = document.getElementById("successNotification");
-    const messageSpan = document.getElementById("successMessage");
-
-    messageSpan.textContent = message;
-    notification.classList.add("show");
-
-    setTimeout(function () {
-        notification.classList.remove("show");
-    }, 4000);
-}
-
-window.showSuccessNotification = showSuccessNotification;

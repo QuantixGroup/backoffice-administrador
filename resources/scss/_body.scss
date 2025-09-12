@@ -10,8 +10,6 @@
 
 .table-container {
     background-color: $bg-color-secondary;
-    border-radius: 0.5rem;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     overflow: hidden;
 }
 
@@ -25,7 +23,7 @@
 
 .table th {
     background-color: $bg-color-secondary;
-    border-bottom: 2px solid $bg-color-tertiary;
+    border-bottom: 2px solid $bg-color-primary;
     font-weight: 600;
     padding: 1rem 0.75rem;
 }

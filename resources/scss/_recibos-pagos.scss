@@ -3,10 +3,15 @@
 
 .recibo-row {
     @include table-row-selectable;
-}
+    cursor: pointer;
+    transition: background-color 0.2s;
 
-.action-buttons {
-    padding: 1rem 1.5rem;
-    background-color: $bg-color-secondary;
-    border-top: 1px solid $bg-color-tertiary;
+    &:hover {
+        background-color: $bg-color-secondary;
+    }
+
+    &.selected {
+        background-color: #e3f2fd;
+        border-left: 4px solid #2196f3;
+    }
 }

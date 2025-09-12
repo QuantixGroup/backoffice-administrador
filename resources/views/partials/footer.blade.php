@@ -2,5 +2,5 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <footer class="footer-container text-center py-3">
-    <p>Cooperativa de Vivienda de Ayuda Mutua - COVIMI 17 - Todos los derechos reservados ©{{ date('Y') }}</p>
+    <p>Cooperativa de Vivienda de Ayuda Mutua - COVIMI 17 ©{{ date('Y') }}</p>
 </footer>

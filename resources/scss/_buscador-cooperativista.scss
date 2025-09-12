@@ -1,0 +1,69 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.input-group {
+    .input-group-text {
+        background-color: $bg-color-primary;
+        color: white;
+        border: none;
+
+        i {
+            width: 16px;
+            text-align: center;
+        }
+    }
+
+    .form-control {
+        border-left: none;
+
+        &:focus {
+            border-color: $bg-color-primary;
+        }
+    }
+
+    .btn-outline-secondary {
+        border-left: none;
+        color: $bg-color-primary;
+
+        &:hover {
+            background-color: $bg-color-danger;
+            border-color: $bg-color-danger;
+            color: white;
+        }
+    }
+}
+
+#searchResults {
+    font-size: 0.9rem;
+    font-weight: 500;
+
+    i {
+        font-size: 0.8rem;
+    }
+}
+
+#cooperativistasTable {
+    tbody tr {
+        transition: opacity 0.2s ease, transform 0.2s ease;
+
+        &[style*="display: none"] {
+            opacity: 0;
+            transform: translateX(-10px);
+        }
+    }
+}
+
+.no-results-row {
+    td {
+        padding: 2rem 1rem !important;
+
+        i {
+            color: $bg-color-warning;
+            font-size: 1.2rem;
+        }
+
+        strong {
+            color: $text-color-primary;
+        }
+    }
+}

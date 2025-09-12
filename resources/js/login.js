@@ -39,12 +39,12 @@ function togglePassword() {
 
     if (passwordInput.type === "password") {
         passwordInput.type = "text";
-        toggleIcon.classList.remove("bi-eye");
-        toggleIcon.classList.add("bi-eye-slash");
+        toggleIcon.classList.remove("fa-eye");
+        toggleIcon.classList.add("fa-eye-slash");
     } else {
         passwordInput.type = "password";
-        toggleIcon.classList.remove("bi-eye-slash");
-        toggleIcon.classList.add("bi-eye");
+        toggleIcon.classList.remove("fa-eye-slash");
+        toggleIcon.classList.add("fa-eye");
     }
 }
 
@@ -62,9 +62,9 @@ function showForgotPasswordModal() {
                     <div class="modal-body">
                         <form id="forgotPasswordForm">
                             <div class="mb-3">
-                                <label for="emailRecovery" class="form-label">Correo Electrónico</label>
-                                <input type="email" class="form-control" id="emailRecovery" placeholder="Ingrese su correo electrónico" required>
-                                <div class="form-text">Recibirá un enlace para restablecer su contraseña en este correo.</div>
+                                <label for="emailRecovery" class="form-label">email</label>
+                                <input type="email" class="form-control" id="emailRecovery" placeholder="Ingrese su email" required>
+                                <div class="form-text">Recibirá un enlace para restablecer su contraseña en este email.</div>
                             </div>
                         </form>
                     </div>
@@ -91,13 +91,13 @@ function sendRecoveryEmail() {
     const email = document.getElementById("emailRecovery").value;
 
     if (!email) {
-        alert("Por favor ingrese su correo electrónico");
+        alert("Por favor ingrese su email");
         return;
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-        alert("Por favor ingrese un correo electrónico válido");
+        alert("Por favor ingrese un email válido");
         return;
     }
 
@@ -110,9 +110,7 @@ function sendRecoveryEmail() {
     sendButton.textContent = "Enviando...";
 
     setTimeout(() => {
-        alert(
-            "Se ha enviado un enlace de recuperación a su correo electrónico"
-        );
+        alert("Se ha enviado un email para recuperar su contraseña");
 
         const modal = bootstrap.Modal.getInstance(
             document.getElementById("forgotPasswordModal")

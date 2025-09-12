@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="<?php echo e(str_replace('_', '-', app()->getLocale())); ?>">
 
 <head>
-    @include('partials.head', ['title' => 'Dashboard - COVIMT 17'])
-    @include('partials.sidebar')
-    @if(session('ok'))
-        <meta name="success-message" content="{{ session('ok') }}">
-    @endif
+    <?php echo $__env->make('partials.head', ['title' => 'Dashboard - COVIMT 17'], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+    <?php echo $__env->make('partials.sidebar', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+    <?php if(session('ok')): ?>
+        <meta name="success-message" content="<?php echo e(session('ok')); ?>">
+    <?php endif; ?>
 </head>
 
 <body>
@@ -19,7 +19,7 @@
         <div class="container-fluid">
             <div class="row mb-4">
                 <div class="col-12">
-                    <h2 class="mb-0">Hola {{ auth()->user()->name ?? auth()->user()->cedula }}</h2>
+                    <h2 class="mb-0">Hola <?php echo e(auth()->user()->name ?? auth()->user()->cedula); ?></h2>
                 </div>
             </div>
 
@@ -45,27 +45,29 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse($sociosPendientes as $socio)
-                                        <tr class="user-row" data-cedula="{{ $socio->cedula }}">
-                                            <td>{{ $socio->nombre ?? 'N/A' }}</td>
-                                            <td>{{ $socio->apellido ?? 'N/A' }}</td>
-                                            <td>{{ $socio->cedula ?? 'N/A' }}</td>
-                                            <td>{{ $socio->fecha_nacimiento ? \Carbon\Carbon::parse($socio->fecha_nacimiento)->format('d/m/Y') : 'N/A' }}
+                                    <?php $__empty_1 = true; $__currentLoopData = $sociosPendientes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $socio): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                        <tr class="user-row" data-cedula="<?php echo e($socio->cedula); ?>">
+                                            <td><?php echo e($socio->nombre ?? 'N/A'); ?></td>
+                                            <td><?php echo e($socio->apellido ?? 'N/A'); ?></td>
+                                            <td><?php echo e($socio->cedula ?? 'N/A'); ?></td>
+                                            <td><?php echo e($socio->fecha_nacimiento ? \Carbon\Carbon::parse($socio->fecha_nacimiento)->format('d/m/Y') : 'N/A'); ?>
+
                                             </td>
-                                            <td>{{ $socio->email ?? 'N/A' }}</td>
-                                            <td>{{ $socio->telefono ?? 'N/A' }}</td>
-                                            <td>{{ $socio->departamento ?? 'N/A' }}</td>
-                                            <td>{{ $socio->situacion_laboral ?? 'N/A' }}</td>
-                                            <td>{{ $socio->ingresos_mensuales ? '$' . number_format($socio->ingresos_mensuales, 0, ',', '.') : 'N/A' }}
+                                            <td><?php echo e($socio->email ?? 'N/A'); ?></td>
+                                            <td><?php echo e($socio->telefono ?? 'N/A'); ?></td>
+                                            <td><?php echo e($socio->departamento ?? 'N/A'); ?></td>
+                                            <td><?php echo e($socio->situacion_laboral ?? 'N/A'); ?></td>
+                                            <td><?php echo e($socio->ingresos_mensuales ? '$' . number_format($socio->ingresos_mensuales, 0, ',', '.') : 'N/A'); ?>
+
                                             </td>
                                         </tr>
-                                    @empty
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                         <tr>
                                             <td colspan="9" class="text-center text-muted py-4">
                                                 No hay usuarios pendientes de aprobación
                                             </td>
                                         </tr>
-                                    @endforelse
+                                    <?php endif; ?>
                                 </tbody>
                             </table>
                         </div>
@@ -84,7 +86,7 @@
         </div>
     </div>
 
-    @include('partials.footer')
+    <?php echo $__env->make('partials.footer', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 </body>
 
-</html>
+</html><?php /**PATH C:\Users\sscri\OneDrive\Programacion y Desarrollo Web\Visual Studio Code\2- Proyectos en Curso\UTU\proyectoFinal\backoffice-administrador\resources\views/inicio.blade.php ENDPATH**/ ?>
