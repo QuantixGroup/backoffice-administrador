@@ -2,14 +2,9 @@ window.Dropzone = window.Dropzone || {};
 Dropzone.autoDiscover = false;
 
 document.addEventListener("DOMContentLoaded", function () {
-    console.log("DOM loaded, initializing profile page...");
-
     const dropzoneElement = document.getElementById("profile-image-dropzone");
     const uploadButton = document.querySelector(".image-upload-button");
     let profileImageDropzone = null;
-
-    console.log("Dropzone element:", dropzoneElement);
-    console.log("Upload button:", uploadButton);
 
     function initializeDropzone() {
         if (dropzoneElement && !profileImageDropzone) {
@@ -54,10 +49,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 },
                 init: function () {
                     const dzInstance = this;
-                    console.log("Dropzone initialized successfully");
 
                     this.on("success", function (file, response) {
-                        console.log("Upload success:", response);
                         if (response.success) {
                             const profileImg = document.getElementById(
                                 "current-profile-image"
@@ -98,23 +91,11 @@ document.addEventListener("DOMContentLoaded", function () {
                         );
                     });
 
-                    this.on("sending", function (file, xhr, formData) {
-                        console.log("Sending file:", file.name);
-                        console.log("FormData:", formData);
-                    });
+                    this.on("sending", function (file, xhr, formData) {});
 
-                    this.on("addedfile", function (file) {
-                        console.log(
-                            "File added:",
-                            file.name,
-                            file.size,
-                            file.type
-                        );
-                    });
+                    this.on("addedfile", function (file) {});
 
-                    this.on("removedfile", function (file) {
-                        console.log("File removed:", file.name);
-                    });
+                    this.on("removedfile", function (file) {});
 
                     this.on("maxfilesexceeded", function (file) {
                         this.removeFile(file);
@@ -125,17 +106,14 @@ document.addEventListener("DOMContentLoaded", function () {
                     });
 
                     this.on("dragenter", function () {
-                        console.log("Drag enter");
                         dropzoneElement.classList.add("dz-drag-hover");
                     });
 
                     this.on("dragleave", function () {
-                        console.log("Drag leave");
                         dropzoneElement.classList.remove("dz-drag-hover");
                     });
 
                     this.on("drop", function () {
-                        console.log("File dropped");
                         dropzoneElement.classList.remove("dz-drag-hover");
                     });
                 },
@@ -147,7 +125,6 @@ document.addEventListener("DOMContentLoaded", function () {
         uploadButton.addEventListener("click", function (e) {
             e.preventDefault();
             e.stopPropagation();
-            console.log("Upload button clicked");
 
             if (
                 dropzoneElement.style.display === "none" ||

@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="<?php echo e(str_replace('_', '-', app()->getLocale())); ?>">
 
 <head>
-    @include('partials.head')
-    @if(session('ok'))
-        <meta name="success-message" content="{{ session('ok') }}">
-    @endif
+    <?php echo $__env->make('partials.head', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+    <?php if(session('ok')): ?>
+        <meta name="success-message" content="<?php echo e(session('ok')); ?>">
+    <?php endif; ?>
 </head>
 
 <body>
-    @include('partials.sidebar')
+    <?php echo $__env->make('partials.sidebar', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
     <div class="main-content">
         <div class="success-notification" id="successNotification">
@@ -24,28 +24,28 @@
                         <div class="mb-3 row">
                             <label class="col-sm-4 col-form-label">Nombre</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" value="{{ $socio->nombre ?? '' }}" disabled>
+                                <input type="text" class="form-control" value="<?php echo e($socio->nombre ?? ''); ?>" disabled>
                             </div>
                         </div>
 
                         <div class="mb-3 row">
                             <label class="col-sm-4 col-form-label">Apellido</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" value="{{ $socio->apellido ?? '' }}" disabled>
+                                <input type="text" class="form-control" value="<?php echo e($socio->apellido ?? ''); ?>" disabled>
                             </div>
                         </div>
 
                         <div class="mb-3 row">
                             <label class="col-sm-4 col-form-label">Email</label>
                             <div class="col-sm-8">
-                                <input type="email" class="form-control" value="{{ $socio->email ?? '' }}" disabled>
+                                <input type="email" class="form-control" value="<?php echo e($socio->email ?? ''); ?>" disabled>
                             </div>
                         </div>
 
                         <div class="mb-3 row">
                             <label class="col-sm-4 col-form-label">Departamento</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" value="{{ $socio->departamento ?? '' }}"
+                                <input type="text" class="form-control" value="<?php echo e($socio->departamento ?? ''); ?>"
                                     disabled>
                             </div>
                         </div>
@@ -54,7 +54,7 @@
                             <label class="col-sm-4 col-form-label">Ingresos Mensuales</label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control"
-                                    value="{{ $socio->ingresos_mensuales ? '$' . number_format($socio->ingresos_mensuales, 0, ',', '.') : '' }}"
+                                    value="<?php echo e($socio->ingresos_mensuales ? '$' . number_format($socio->ingresos_mensuales, 0, ',', '.') : ''); ?>"
                                     disabled>
                             </div>
                         </div>
@@ -62,7 +62,7 @@
                         <div class="mb-3 row">
                             <label class="col-sm-4 col-form-label">Estado Civil</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" value="{{ $socio->estado_civil ?? '' }}"
+                                <input type="text" class="form-control" value="<?php echo e($socio->estado_civil ?? ''); ?>"
                                     disabled>
                             </div>
                         </div>
@@ -72,7 +72,7 @@
                         <div class="mb-3 row">
                             <label class="col-sm-4 col-form-label">Documento</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" value="{{ $socio->cedula ?? '' }}" disabled>
+                                <input type="text" class="form-control" value="<?php echo e($socio->cedula ?? ''); ?>" disabled>
                             </div>
                         </div>
 
@@ -80,7 +80,7 @@
                             <label class="col-sm-4 col-form-label">Fecha de Nacimiento</label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control"
-                                    value="{{ $socio->fecha_nacimiento ? \Carbon\Carbon::parse($socio->fecha_nacimiento)->format('d/m/Y') : '' }}"
+                                    value="<?php echo e($socio->fecha_nacimiento ? \Carbon\Carbon::parse($socio->fecha_nacimiento)->format('d/m/Y') : ''); ?>"
                                     disabled>
                             </div>
                         </div>
@@ -88,21 +88,21 @@
                         <div class="mb-3 row">
                             <label class="col-sm-4 col-form-label">Teléfono</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" value="{{ $socio->telefono ?? '' }}" disabled>
+                                <input type="text" class="form-control" value="<?php echo e($socio->telefono ?? ''); ?>" disabled>
                             </div>
                         </div>
 
                         <div class="mb-3 row">
                             <label class="col-sm-4 col-form-label">Ciudad</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" value="{{ $socio->ciudad ?? '' }}" disabled>
+                                <input type="text" class="form-control" value="<?php echo e($socio->ciudad ?? ''); ?>" disabled>
                             </div>
                         </div>
 
                         <div class="mb-3 row">
                             <label class="col-sm-4 col-form-label">Situación Laboral</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" value="{{ $socio->situacion_laboral ?? '' }}"
+                                <input type="text" class="form-control" value="<?php echo e($socio->situacion_laboral ?? ''); ?>"
                                     disabled>
                             </div>
                         </div>
@@ -111,7 +111,7 @@
                             <label class="col-sm-4 col-form-label">Cantidad de Integrantes</label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control"
-                                    value="{{ $socio->integrantes_familiares ?? '' }}" disabled>
+                                    value="<?php echo e($socio->integrantes_familiares ?? ''); ?>" disabled>
                             </div>
                         </div>
                     </div>
@@ -123,7 +123,7 @@
                             <label class="form-label">¿Por qué desea unirse a nuestra cooperativa de
                                 viviendas?</label>
                             <textarea class="form-control textarea-large" rows="8"
-                                disabled>{{ $socio->motivacion ?? '' }}</textarea>
+                                disabled><?php echo e($socio->motivacion ?? ''); ?></textarea>
                         </div>
                     </div>
                 </div>
@@ -145,7 +145,7 @@
             <div class="modal-title">¿Está seguro que desea aceptar la solicitud?</div>
             <div class="modal-buttons">
                 <button class="btn-modal-cancel" onclick="hideApproveModal()">Cancelar</button>
-                <button class="btn-modal-confirm btn-aprobar" data-cedula="{{ $socio->cedula }}"
+                <button class="btn-modal-confirm btn-aprobar" data-cedula="<?php echo e($socio->cedula); ?>"
                     onclick="approveUser()">Aceptar</button>
             </div>
         </div>
@@ -162,15 +162,15 @@
         </div>
     </div>
 
-    <form id="approveForm" method="POST" action="{{ route('socios.aprobar', $socio->cedula) }}" style="display: none;">
-        @csrf
+    <form id="approveForm" method="POST" action="<?php echo e(route('socios.aprobar', $socio->cedula)); ?>" style="display: none;">
+        <?php echo csrf_field(); ?>
     </form>
 
-    <form id="rejectForm" method="POST" action="{{ route('socios.rechazar', $socio->cedula) }}" style="display: none;">
-        @csrf
+    <form id="rejectForm" method="POST" action="<?php echo e(route('socios.rechazar', $socio->cedula)); ?>" style="display: none;">
+        <?php echo csrf_field(); ?>
     </form>
 
-    @include('partials.footer')
+    <?php echo $__env->make('partials.footer', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 </body>
 
-</html>
+</html><?php /**PATH C:\xampp\htdocs\proyectoFinal\backoffice-administrador\resources\views/socio-detalle.blade.php ENDPATH**/ ?>

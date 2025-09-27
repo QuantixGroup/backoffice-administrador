@@ -13,6 +13,28 @@ class Socio extends Model
     use SoftDeletes;
     protected $table = 'socios';
 
+    protected $fillable = [
+        'cedula',
+        'nombre',
+        'apellido',
+        'fecha_nacimiento',
+        'telefono',
+        'direccion',
+        'departamento',
+        'ciudad',
+        'email',
+        'foto_perfil',
+        'contraseña',
+        'ingreso_mensual',
+        'situacion_laboral',
+        'estado',
+        'integrantes_familiares',
+        'fecha_ingreso',
+        'fecha_egreso',
+        'oauth_client_id',
+        'oauth_client_secret'
+    ];
+
     private $datosApi = null;
 
     private function getDatosApi()
@@ -54,6 +76,11 @@ class Socio extends Model
     {
         $horas = $this->horas_trabajadas;
         return $horas . ' hrs';
+    }
+
+    public function getIngresosMensualesAttribute()
+    {
+        return $this->attributes['ingreso_mensual'] ?? null;
     }
 
 
