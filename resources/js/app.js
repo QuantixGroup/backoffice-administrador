@@ -6,3 +6,5 @@ import "./socios-notificacion";
 import "./cooperativistas";
 import "./buscador-cooperativista";
 import "./pagos";
+import "./dark-mode";
+import "./sidebar";

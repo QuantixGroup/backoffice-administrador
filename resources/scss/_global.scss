@@ -13,6 +13,14 @@ h2 {
     }
 }
 
+@media (max-width: 768px) {
+
+    h2 {
+        font-size: 1rem;
+        text-align: center;
+    }
+}
+
 .card {
     background-color: $bg-color-secondary;
     border-radius: 1.5rem;
@@ -27,10 +35,10 @@ h2 {
     }
 }
 
+
 .container-light {
     @include container-light;
 }
-
 
 .form-control {
     border-radius: 0.5rem;

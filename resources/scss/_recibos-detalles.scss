@@ -8,11 +8,7 @@
 }
 
 .table-header {
-    background-color: $bg-color-primary;
-    color: white;
-    padding: 20px;
-    margin-bottom: 20px;
-    border-radius: 8px;
+    @extend .table-header;
 }
 
 .table-header h2 {
@@ -119,7 +115,7 @@
     html[data-bs-theme="dark"] &,
     body.dark & {
         background-color: $bg-color-secondary-dark;
-    }   
+    }
 }
 
 .recibos-table tbody tr:last-child td {

@@ -13,7 +13,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
-                    <h2 class="mb-4 text-center">Perfil de <?php echo e($user->name ?? 'Administrador'); ?></h2>
+                    <h2 class="mb-4 mt-4 text-center">Perfil de <?php echo e($user->name ?? ''); ?></h2>
                 </div>
             </div>
 

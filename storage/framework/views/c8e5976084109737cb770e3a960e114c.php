@@ -9,8 +9,8 @@
     <?php echo $__env->make('partials.sidebar', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
     <div class="main-content">
-        <div class="recibos-detalle-container">
-            <div class="table-header text-center">
+        <div class="recibos-detalle-container mt-4">
+            <div class="table-header text-center mt-5">
                 <h2 class="mb-0">Detalles de recibos de pagos</h2>
             </div>
 

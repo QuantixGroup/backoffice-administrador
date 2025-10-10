@@ -14,4 +14,4 @@
     href="https://fonts.googleapis.com/css2?family=Aldrich&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
     rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<?php echo app('Illuminate\Foundation\Vite')(['resources/scss/app.scss', 'resources/js/app.js', 'resources/js/dark-mode.js']); ?><?php /**PATH C:\xampp\htdocs\proyectoFinal\backoffice-administrador\resources\views/partials/head.blade.php ENDPATH**/ ?>
+<?php echo app('Illuminate\Foundation\Vite')(['resources/scss/app.scss', 'resources/js/app.js']); ?><?php /**PATH C:\xampp\htdocs\proyectoFinal\backoffice-administrador\resources\views/partials/head.blade.php ENDPATH**/ ?>

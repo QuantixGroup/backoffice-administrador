@@ -19,7 +19,7 @@
         <div class="container-fluid">
             <div class="row mb-4">
                 <div class="col-12">
-                    <h2 class="mb-0">Hola {{ auth()->user()->name ?? auth()->user()->cedula }}</h2>
+                    <h2 class="mt-4 text-left ">Hola {{ auth()->user()->name ?? auth()->user()->cedula }}</h2>
                 </div>
             </div>
 

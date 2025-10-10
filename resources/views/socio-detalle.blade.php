@@ -18,7 +18,7 @@
         </div>
 
         <div class="container-fluid">
-            <div class="form-container">
+            <div class="form-container mt-5">
                 <div class="row">
                     <div class="col-md-6">
                         <div class="mb-3 row">
@@ -132,7 +132,7 @@
                     <button type="button" class="btn-reject" onclick="showRejectModal()">
                         Rechazar Usuario
                     </button>
-                    <button type="button" class="btn-approve ms-2" onclick="showApproveModal()">
+                    <button type="button" class="btn-approve" onclick="showApproveModal()">
                         Aceptar Usuario
                     </button>
                 </div>

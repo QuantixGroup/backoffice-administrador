@@ -14,7 +14,6 @@
     transition: all 0.3s ease;
 }
 
-
 .btn-login {
     @include btn-base;
     font-size: 1.2rem;
@@ -287,4 +286,54 @@ body.dark .btn-login {
 
 .btn-modal-confirm {
     @include btn-confirm;
+}
+
+.btn-toggle {
+    background: none;
+    border: none;
+    color: $text-color-primary;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease;
+
+    &:hover {
+        color: darken($text-color-primary, 80%);
+    }
+
+    html[data-bs-theme="dark"] &,
+    body.dark & {
+        color: $text-color-tertiary-dark;
+
+        &:hover {
+            color: lighten($text-color-tertiary-dark, 50%);
+        }
+    }
+}
+
+@media (max-width: 768px) {
+
+    .btn-reject,
+    .btn-approve,
+    .btn-abrir,
+    .btn-ver-recibo {
+        display: block;
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .btn-reject,
+    .btn-approve,
+    .btn-abrir,
+    .btn-ver-recibo {
+        display: block;
+        width: 100%;
+        margin-bottom: 1rem;
+    }
 }

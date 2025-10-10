@@ -9,8 +9,8 @@
     @include('partials.sidebar')
 
     <div class="main-content">
-        <div class="recibos-detalle-container">
-            <div class="table-header text-center">
+        <div class="recibos-detalle-container mt-4">
+            <div class="table-header text-center mt-5">
                 <h2 class="mb-0">Detalles de recibos de pagos</h2>
             </div>
 

@@ -13,8 +13,8 @@
 
             <div class="row">
                 <div class="col-12">
-                    <div class="table-container">
-                        <div class="table-header text-center">
+                    <div class="table-container mt-4">
+                        <div class="table-header mt-5 text-center">
                             <h2 class="mb-0">Listado de Cooperativistas</h2>
                         </div>
 
