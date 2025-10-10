@@ -28,20 +28,38 @@ class CreateOauthClientsForApprovedSocios extends Command
      */
     public function handle(): int
     {
-        $socios = Socio::where('estado', 'aprobado')
-            ->when(!$this->option('force'), function ($q) {
-                $q->whereNull('oauth_client_id');
-            })
-            ->get();
+        $socios = Socio::where('estado', 'aprobado')->get();
 
-        $this->info('Found ' . $socios->count() . ' socios to process');
+        $this->info('Found ' . $socios->count() . ' approved socios to process');
 
         foreach ($socios as $socio) {
             try {
+                $usuario = \App\Models\UsuariosNormales::where('cedula', $socio->cedula)->first();
+
+                if (!$usuario) {
+                    continue;
+                }
+
+                $existingClient = DB::table('oauth_clients')
+                    ->where('user_id', $usuario->id)
+                    ->where('password_client', 1)
+                    ->where('revoked', 0)
+                    ->first();
+
+                if ($existingClient && !$this->option('force')) {
+                    continue;
+                }
+
+                if ($this->option('force') && $existingClient) {
+                    DB::table('oauth_clients')
+                        ->where('id', $existingClient->id)
+                        ->update(['revoked' => 1]);
+                }
+
                 $secret = Str::random(40);
                 $now = now();
                 $clientId = DB::table('oauth_clients')->insertGetId([
-                    'user_id' => null,
+                    'user_id' => $usuario->id,
                     'name' => 'Socio ' . $socio->cedula,
                     'secret' => $secret,
                     'provider' => 'users',
@@ -53,11 +71,7 @@ class CreateOauthClientsForApprovedSocios extends Command
                     'updated_at' => $now,
                 ]);
 
-                $socio->oauth_client_id = $clientId;
-                $socio->oauth_client_secret = $secret;
-                $socio->save();
-
-                $this->info('Created client for ' . $socio->cedula . ' id=' . $clientId);
+                $this->info('Created OAuth client for ' . $socio->cedula . ' (Client ID: ' . $clientId . ')');
             } catch (\Exception $e) {
                 $this->error('Failed for ' . $socio->cedula . ': ' . $e->getMessage());
             }

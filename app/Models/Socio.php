@@ -30,9 +30,7 @@ class Socio extends Model
         'estado',
         'integrantes_familiares',
         'fecha_ingreso',
-        'fecha_egreso',
-        'oauth_client_id',
-        'oauth_client_secret'
+        'fecha_egreso'
     ];
 
     private $datosApi = null;

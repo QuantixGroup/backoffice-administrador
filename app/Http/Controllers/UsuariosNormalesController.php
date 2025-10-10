@@ -50,7 +50,13 @@ class UsuariosNormalesController extends Controller
         }
 
         try {
-            if (empty($socioEncontrado->oauth_client_id)) {
+            $existingClient = DB::table('oauth_clients')
+                ->where('user_id', $appUserId)
+                ->where('password_client', 1)
+                ->where('revoked', 0)
+                ->first();
+
+            if (!$existingClient) {
                 $secret = Str::random(40);
                 $now = now();
                 $clientId = DB::table('oauth_clients')->insertGetId([
@@ -65,9 +71,6 @@ class UsuariosNormalesController extends Controller
                     'created_at' => $now,
                     'updated_at' => $now,
                 ]);
-
-                $socioEncontrado->oauth_client_id = $clientId;
-                $socioEncontrado->oauth_client_secret = $secret;
             }
         } catch (\Throwable $e) {
             Log::error('Error creando oauth client para socio ' . $socioEncontrado->cedula . ': ' . $e->getMessage());
