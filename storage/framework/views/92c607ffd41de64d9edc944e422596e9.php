@@ -22,14 +22,15 @@
               <?php echo csrf_field(); ?>
               <div class="mb-3">
                 <label for="cedula" class="form-label">Usuario (CI)</label>
-                <input type="text" name="cedula" id="cedula" class="form-control" placeholder="Ingrese su Documento">
+                <input type="text" name="cedula" id="cedula" class="form-cedula" placeholder="Ingrese su Documento">
               </div>
               <div class="mb-3">
                 <label for="password" class="form-label">Contraseña</label>
-                <div class="position-relative">
-                  <input type="password" name="password" id="password" class="form-control" placeholder="Su contraseña">
+                <div class="position-relative ">
+                  <input type="password" name="password" id="password" class="form-password"
+                    placeholder="Su contraseña">
                   <button type="button" class="btn-toggle-password" onclick="togglePassword()">
-                    <i class="fas fa-eye" id="toggleIcon"></i>
+                    <i class="fas fa-eye-slash" id="toggleIcon"></i>
                   </button>
                 </div>
               </div>
@@ -48,9 +49,14 @@
         </div>
       </div>
     </div>
+    <button id="darkModeFloatingToggle" class="btn btn-dark-mode" onclick="toggleDarkMode()"
+      aria-label="Toggle dark mode">
+      <i class="fa-solid fa-moon"></i>
+    </button>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <?php echo $__env->make('partials.reset-password', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
   <?php echo app('Illuminate\Foundation\Vite')(['resources/js/app.js']); ?>
 </body>
 

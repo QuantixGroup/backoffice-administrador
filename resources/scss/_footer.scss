@@ -20,6 +20,12 @@
         padding: 1rem 0;
         font-size: 0.85rem;
     }
+
+    html[data-bs-theme="dark"] &,
+    body.dark & {
+        background-color: $bg-color-primary-dark;
+        color: $text-color-primary-dark;
+    }
 }
 
 body {

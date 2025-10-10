@@ -2,17 +2,21 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "build": "vite build",
         "dev": "vite",
+        "build": "vite build",
+        "preview": "vite preview",
         "dev-all": "concurrently \"php artisan serve --port=8002\" \"npm run dev\""
     },
     "dependencies": {
-        "autoprefixer": "^10.4.20",
         "axios": "^1.7.4",
         "bootstrap": "^5.3.8",
+        "dropzone": "^6.0.0-beta.2"
+    },
+    "devDependencies": {
+        "autoprefixer": "^10.4.20",
         "concurrently": "^9.0.1",
-        "dropzone": "^6.0.0-beta.2",
         "laravel-vite-plugin": "^1.0",
+        "postcss": "^8.4.47",
         "sass": "^1.92.1",
         "vite": "^6.0"
     },

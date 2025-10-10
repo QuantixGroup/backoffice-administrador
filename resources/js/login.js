@@ -29,7 +29,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const forgotPasswordLink = document.querySelector('a[href="#"]');
     forgotPasswordLink.addEventListener("click", function (e) {
         e.preventDefault();
-        showForgotPasswordModal();
+        const el = document.getElementById("forgotPasswordModal");
+        if (el) new bootstrap.Modal(el).show();
     });
 });
 
@@ -39,52 +40,20 @@ function togglePassword() {
 
     if (passwordInput.type === "password") {
         passwordInput.type = "text";
-        toggleIcon.classList.remove("fa-eye");
-        toggleIcon.classList.add("fa-eye-slash");
-    } else {
-        passwordInput.type = "password";
         toggleIcon.classList.remove("fa-eye-slash");
         toggleIcon.classList.add("fa-eye");
+    } else {
+        passwordInput.type = "password";
+        toggleIcon.classList.remove("fa-eye");
+        toggleIcon.classList.add("fa-eye-slash");
     }
 }
 
 window.togglePassword = togglePassword;
 
 function showForgotPasswordModal() {
-    const modalHTML = `
-        <div class="modal fade" id="forgotPasswordModal" tabindex="-1" aria-labelledby="forgotPasswordModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="forgotPasswordModalLabel">Recuperar Contraseña</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="forgotPasswordForm">
-                            <div class="mb-3">
-                                <label for="emailRecovery" class="form-label">email</label>
-                                <input type="email" class="form-control" id="emailRecovery" placeholder="Ingrese su email" required>
-                                <div class="form-text">Recibirá un enlace para restablecer su contraseña en este email.</div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-primary" onclick="sendRecoveryEmail()">Enviar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
-
-    if (!document.getElementById("forgotPasswordModal")) {
-        document.body.insertAdjacentHTML("beforeend", modalHTML);
-    }
-
-    const modal = new bootstrap.Modal(
-        document.getElementById("forgotPasswordModal")
-    );
-    modal.show();
+    const el = document.getElementById("forgotPasswordModal");
+    if (el) new bootstrap.Modal(el).show();
 }
 
 function sendRecoveryEmail() {
@@ -101,9 +70,7 @@ function sendRecoveryEmail() {
         return;
     }
 
-    const sendButton = document.querySelector(
-        "#forgotPasswordModal .btn-primary"
-    );
+    const sendButton = document.querySelector("#sendRecoveryButton");
     const originalText = sendButton.textContent;
 
     sendButton.disabled = true;

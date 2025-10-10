@@ -79,15 +79,15 @@
 
                             <div class="profile-actions">
                                 <button type="button" id="edit-profile-btn" class="btn btn-edit-profile">
-                                    <i class="fa-solid fa-pen-to-square me-2"></i>Editar Perfil
+                                    Editar Perfil
                                 </button>
                                 <button type="button" id="cancel-profile-btn" class="btn btn-secondary"
                                     style="display: none;">
-                                    <i class="fa-solid fa-times me-2"></i>Cancelar
+                                    Cancelar
                                 </button>
                                 <button type="button" id="save-profile-btn" class="btn btn-success"
                                     style="display: none;">
-                                    <i class="fa-solid fa-save me-2"></i>Guardar
+                                    Guardar
                                 </button>
                             </div>
                         </form>

@@ -8,9 +8,20 @@
     min-height: 100vh;
 }
 
+html[data-bs-theme="dark"] .main-content,
+body.dark .main-content {
+    background-color: $bg-color-primary-dark;
+    color: $text-color-primary-dark;
+}
+
 .table-container {
     background-color: $bg-color-secondary;
     overflow: hidden;
+}
+
+html[data-bs-theme="dark"] .table-container,
+body.dark .table-container {
+    background-color: $bg-color-primary-dark;
 }
 
 .table-header {
@@ -21,16 +32,37 @@
     font-size: 1.5rem;
 }
 
+html[data-bs-theme="dark"] .table-header,
+body.dark .table-header {
+    background-color: $bg-color-secondary-dark;
+    color: $text-color-primary-dark;
+}
+
 .table th {
-    background-color: $bg-color-secondary;
+    background-color: $bg-color-tertiary;
     border-bottom: 2px solid $bg-color-primary;
     font-weight: 600;
+    font-family: $font-subtitle;
     padding: 1rem 0.75rem;
+
+    html[data-bs-theme="dark"] &,
+    body.dark & {
+        background-color: $bg-color-primary;
+        color: $text-color-primary-dark;
+        border-bottom: 2px solid rgba(0, 0, 0, 0.4);
+    }
 }
 
 .table td {
     padding: 1rem 0.75rem;
     vertical-align: middle;
+    font-family: $font-text;
+
+    html[data-bs-theme="dark"] &,
+    body.dark & {
+        background-color: $bg-color-secondary-dark;
+        color: $text-color-primary-dark;
+    }
 }
 
 .table tbody tr {
@@ -40,9 +72,22 @@
 
 .table tbody tr:hover {
     background-color: $bg-color-tertiary;
+
+    html[data-bs-theme="dark"] &,
+    body.dark & {
+        background-color: $bg-color-secondary-dark;
+    }
 }
 
 .table tbody tr.selected {
     background-color: $bg-color-success;
     border-left: 4px solid $bg-color-primary;
+
+    html[data-bs-theme="dark"] &,
+    body.dark & {
+        background-color: $bg-color-success;
+        border-left: 4px solid $bg-color-primary-dark;
+    }
 }
+
+

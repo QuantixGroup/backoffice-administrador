@@ -49,11 +49,13 @@ class UserController extends Controller
             $user = Auth::user();
 
             if ($user instanceof User) {
-                $user->name = $request->nombre;
-                $user->apellido = $request->apellido;
-                $user->email = $request->email;
-                $user->telefono = $request->telefono;
-                $user->fecha_nacimiento = $request->fecha_nacimiento;
+                $user->fill([
+                    'name' => $request->nombre,
+                    'apellido' => $request->apellido,
+                    'email' => $request->email,
+                    'telefono' => $request->telefono,
+                    'fecha_nacimiento' => $request->fecha_nacimiento,
+                ]);
                 $user->save();
             } else {
                 return response()->json([
@@ -92,17 +94,21 @@ class UserController extends Controller
             $user = User::find(Auth::id());
 
             if ($request->hasFile('profile_image')) {
-                if ($user->profile_image && Storage::disk('public')->exists($user->profile_image)) {
-                    Storage::disk('public')->delete($user->profile_image);
-                }
                 $imagePath = $request->file('profile_image')->store('profile_images', 'public');
+
+                $oldImage = $user->profile_image;
+
                 $user->profile_image = $imagePath;
                 $user->save();
+
+                if ($oldImage && Storage::disk('public')->exists($oldImage)) {
+                    Storage::disk('public')->delete($oldImage);
+                }
 
                 return response()->json([
                     'success' => true,
                     'message' => 'Imagen de perfil actualizada correctamente',
-                    'image_url' => Storage::url($imagePath)
+                    'image_url' => asset('storage/' . $imagePath)
                 ]);
             }
 
@@ -122,7 +128,7 @@ class UserController extends Controller
     public function showProfile()
     {
         $user = Auth::user();
-        $profileImageUrl = $user->profile_image ? Storage::url($user->profile_image) : asset('img/admin-profile.jpg');
+        $profileImageUrl = $user->profile_image ? asset('storage/' . $user->profile_image) : asset('img/admin-profile.jpg');
 
         return view('perfil', [
             'user' => $user,

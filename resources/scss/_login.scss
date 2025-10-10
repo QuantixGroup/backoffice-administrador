@@ -47,6 +47,7 @@ h1.logo-text {
     @media (max-width: 576px) {
         font-size: 1.5rem;
     }
+    
 }
 
 .login-card {
@@ -60,6 +61,13 @@ h1.logo-text {
     @media (max-width: 576px) {
         padding: 1.5rem;
         border-radius: 1rem;
+    }
+
+    html[data-bs-theme="dark"] &,
+    body.dark & {
+        background-color: $bg-color-primary-dark;
+        color: $text-color-primary-dark;
+        border: 1px solid rgba(0, 0, 0, 0.2);
     }
 }
 
@@ -88,10 +96,50 @@ a,
         text-decoration: underline;
         cursor: pointer;
     }
+
+    html[data-bs-theme="dark"] &,
+    body.dark & {
+        color: $text-color-primary-dark;
+    }
 }
 
 .form-label {
     font-family: $font-text;
     color: $text-color-primary;
     font-weight: 500;
+
+    html[data-bs-theme="dark"] &,
+    body.dark & {
+        color: $text-color-primary-dark;
+    }
+}
+
+.form-cedula, .form-password {
+    background-color: $bg-color-label;
+    font-family: $font-text;
+    color: $text-color-primary;
+    border: 1px solid $bg-color-primary;
+    border-radius: 0.375rem;
+    padding: 0.5rem 1rem;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+
+    &:focus {
+        border-color: $bg-color-primary;
+        outline: none;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    }
+
+    html[data-bs-theme="dark"] &,
+    body.dark & {
+        background-color: $bg-color-label;
+        color: $text-color-secondary-dark;
+        border: 1px solid $bg-color-secondary-dark;
+
+        &:focus {
+            border-color: $bg-color-secondary-dark;
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+    }
 }

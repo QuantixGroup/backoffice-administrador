@@ -4,3 +4,6 @@
 <footer class="footer-container text-center py-3">
     <p>Cooperativa de Vivienda de Ayuda Mutua - COVIMI 17 ©{{ date('Y') }}</p>
 </footer>
+
+<button id="darkModeFloatingToggle" class="btn btn-dark-mode" aria-label="Toggle dark mode"
+    title="Alternar tema"></button>
