@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Schema;
 
 
 class UsuariosNormalesController extends Controller
@@ -21,7 +22,7 @@ class UsuariosNormalesController extends Controller
         return view('socios', compact('sociosPendientes'));
     }
 
-    public function aprobarPorCedula(string $cedula, Request $request = null)
+    public function aprobarPorCedula(string $cedula, ?Request $request = null)
     {
         $socioEncontrado = Socio::where('cedula', $cedula)
             ->where('estado', 'pendiente')
@@ -73,7 +74,7 @@ class UsuariosNormalesController extends Controller
                 ]);
             }
         } catch (\Throwable $e) {
-            Log::error('Error creando oauth client para socio ' . $socioEncontrado->cedula . ': ' . $e->getMessage());
+            Log::error('Error creando oauth client: ' . $e->getMessage());
         }
 
         $socioEncontrado->estado = 'aprobado';

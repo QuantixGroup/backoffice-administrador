@@ -2,28 +2,20 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class ApiHorasService
 {
-    private static $apiUrl;
-    private static $apiToken;
-
-    public function __construct()
-    {
-        self::$apiUrl = config('services.api_horas.url');
-        self::$apiToken = config('services.api_horas.token');
-    }
-
     public static function getHorasTrabajadas($cedula)
     {
         try {
-            Log::info("Consultando horas trabajadas para cédula: {$cedula} - API no encontrada");
-            return 0;
+            $totalHoras = DB::table('registros_horas')
+                ->where('cedula', $cedula)
+                ->sum('conteo_de_horas');
+
+            return $totalHoras ?? 0;
 
         } catch (\Exception $e) {
-            Log::error("Error al consultar horas trabajadas: " . $e->getMessage());
             return 0;
         }
     }
@@ -31,11 +23,28 @@ class ApiHorasService
     public static function getHistorialHoras($cedula)
     {
         try {
-            Log::info("Consultando historial de horas para cédula: {$cedula} - API no encontrada");
-            return [];
+            $registros = DB::table('registros_horas')
+                ->where('cedula', $cedula)
+                ->orderBy('fecha', 'desc')
+                ->get()
+                ->map(function ($registro) {
+                    return [
+                        'id' => $registro->id,
+                        'fecha' => $registro->fecha,
+                        'conteo_de_horas' => $registro->conteo_de_horas,
+                        'tipo_trabajo' => $registro->tipo_trabajo,
+                        'descripcion' => $registro->descripcion,
+                        'estado' => $registro->estado,
+                        'comprobante_compensacion' => $registro->comprobante_compensacion,
+                        'monto_compensacion' => $registro->monto_compensacion,
+                        'fecha_compensacion' => $registro->fecha_compensacion,
+                    ];
+                })
+                ->toArray();
+
+            return $registros;
 
         } catch (\Exception $e) {
-            Log::error("Error al consultar historial de horas: " . $e->getMessage());
             return [];
         }
     }

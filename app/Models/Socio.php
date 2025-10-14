@@ -46,7 +46,7 @@ class Socio extends Model
     public function getEstadoPagoAttribute()
     {
         $datos = $this->getDatosApi();
-        return $datos['estado_pago'] ?? 'pendiente';
+        return $datos['ultimo_estado_pago'] ?? 'pendiente';
     }
 
     public function getEstadoPagoBadgeAttribute()
@@ -54,13 +54,13 @@ class Socio extends Model
         $estado = $this->estado_pago;
 
         switch ($estado) {
-            case 'pagado':
-                return '<span class="badge bg-success">Pagado</span>';
-            case 'vencido':
-                return '<span class="badge bg-danger">Vencido</span>';
+            case 'aceptado':
+                return '<span class="badge bg-success">Aceptado</span>';
+            case 'rechazado':
+                return '<span class="badge bg-danger">Rechazado</span>';
             case 'pendiente':
             default:
-                return '<span class="badge bg-secondary">Pendiente</span>';
+                return '<span class="badge bg-warning text-dark">Pendiente</span>';
         }
     }
 

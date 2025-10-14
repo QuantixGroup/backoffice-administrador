@@ -138,3 +138,19 @@
         width: 100%;
     }
 }
+
+.estado-select {
+    background-color: $bg-color-tertiary;
+    color: $text-color-primary;
+    padding: 6px;
+    border: 1px solid #6b7280;
+    border-radius: 4px;
+    cursor: pointer;
+
+    html[data-bs-theme="dark"] &,
+    body.dark & {
+        background-color: $bg-color-secondary-dark;
+        border-color: #6b7280;
+        color: $text-color-primary-dark;
+    }
+}

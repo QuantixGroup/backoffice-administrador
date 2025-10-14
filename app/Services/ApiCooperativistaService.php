@@ -19,17 +19,38 @@ class ApiCooperativistaService
     public static function getDatosCooperativista($cedula)
     {
         try {
-            Log::info("Consultando datos cooperativista para cédula: {$cedula} - API no implementada");
+            if (!self::$apiUrl) {
+                self::$apiUrl = config('services.api_cooperativista.url', 'http://127.0.0.1:8001/api');
+            }
+
+            $ultimoEstado = 'pendiente';
+
+            $recibosUrl = self::$apiUrl . '/recibos/' . $cedula;
+            $headers = ['Accept' => 'application/json'];
+
+            if (self::$apiToken) {
+                $headers['Authorization'] = 'Bearer ' . self::$apiToken;
+            }
+
+            $response = Http::withHeaders($headers)->timeout(5)->get($recibosUrl);
+
+            if ($response->successful()) {
+                $recibos = $response->json();
+                if (!empty($recibos) && is_array($recibos)) {
+                    $ultimoEstado = $recibos[0]['estado'] ?? 'pendiente';
+                }
+            }
+
+            $horasTrabajadas = ApiHorasService::getHorasTrabajadas($cedula);
 
             return [
-                'estado_pago' => 'pendiente',
-                'horas_trabajadas' => 0
+                'ultimo_estado_pago' => $ultimoEstado,
+                'horas_trabajadas' => $horasTrabajadas
             ];
 
         } catch (\Exception $e) {
-            Log::error("Error al consultar datos cooperativista: " . $e->getMessage());
             return [
-                'estado_pago' => 'pendiente',
+                'ultimo_estado_pago' => 'pendiente',
                 'horas_trabajadas' => 0
             ];
         }
@@ -38,11 +59,9 @@ class ApiCooperativistaService
     public static function getHistorialCompleto($cedula)
     {
         try {
-            Log::info("Consultando historial completo para cédula: {$cedula} - API no implementada");
-            return [];
+            return ApiHorasService::getHistorialHoras($cedula);
 
         } catch (\Exception $e) {
-            Log::error("Error al consultar historial completo: " . $e->getMessage());
             return [];
         }
     }
