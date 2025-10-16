@@ -36,8 +36,8 @@
                 </div>
 
                 <div class="recibos-table-container">
-                    <div class="recibos-table">
-                        <table>
+                    <div class="table-responsive">
+                        <table id="recibosTable" class="table table-hover mb-0">
                             <thead>
                                 <tr>
                                     <th>Número</th>
@@ -50,18 +50,22 @@
                             <tbody>
                                 @if(isset($recibos) && count($recibos) > 0)
                                     @foreach($recibos as $recibo)
-                                        <tr data-recibo-id="{{ $recibo['id_pago'] ?? '' }}">
+                                        <tr class="table-row-selectable" data-recibo="{{ $recibo['id_pago'] ?? '' }}"
+                                            data-recibo-id="{{ $recibo['id_pago'] ?? '' }}"
+                                            data-numero="{{ $recibo['numero'] ?? '' }}"
+                                            data-monto="{{ $recibo['monto'] ?? '' }}"
+                                            data-estado="{{ $recibo['estado'] ?? 'pendiente' }}"
+                                            data-archivo="{{ $recibo['archivo_comprobante'] ?? '' }}"
+                                            data-observacion="{{ $recibo['observacion'] ?? '' }}">
                                             <td>{{ $recibo['numero'] ?? '' }}</td>
                                             <td>{{ $recibo['monto'] ?? '' }}</td>
                                             <td>{{ $recibo['mes'] ?? '' }}</td>
                                             <td>{{ $recibo['año'] ?? '' }}</td>
                                             <td>
-                                                <select class="estado-select" data-id="{{ $recibo['id_pago'] ?? '' }}"
-                                                    data-original-estado="{{ $recibo['estado'] ?? 'pendiente' }}">
-                                                    <option value="pendiente" {{ ($recibo['estado'] ?? '') == 'pendiente' ? 'selected' : '' }}>Pendiente</option>
-                                                    <option value="aceptado" {{ ($recibo['estado'] ?? '') == 'aceptado' ? 'selected' : '' }}>Aceptado</option>
-                                                    <option value="rechazado" {{ ($recibo['estado'] ?? '') == 'rechazado' ? 'selected' : '' }}>Rechazado</option>
-                                                </select>
+                                                <span
+                                                    class="badge {{ ($recibo['estado'] ?? 'pendiente') == 'aceptado' ? 'bg-success' : (($recibo['estado'] ?? 'pendiente') == 'rechazado' ? 'bg-danger' : 'bg-warning') }}">
+                                                    {{ ucfirst($recibo['estado'] ?? 'Pendiente') }}
+                                                </span>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -73,20 +77,59 @@
                             </tbody>
                         </table>
                     </div>
+                    <div class="mt-3 text-center">
+                        <button id="btnAbrirRecibo" class="btn-abrir" disabled>Abrir</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                    @if(isset($recibos) && count($recibos) > 0)
-                        <div class="text-center mt-4 mb-4">
-                            <button id="guardarCambiosBtn" class="btn-guardar-cambios" disabled>
-                                Guardar
-                            </button>
+    <div class="modal fade" id="modalReciboDetalle" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Recibo #<span id="modalReciboNumero"></span></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="pdf-container">
+                                <iframe id="pdfViewer"></iframe>
+                            </div>
                         </div>
-                    @endif
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold mt-4">Monto</label>
+                                <input type="text" id="modalMonto" class="form-control" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Estado</label>
+                                <select id="modalEstado" class="form-select">
+                                    <option value="pendiente" selected>Pendiente</option>
+                                    <option value="aceptado">Aceptado</option>
+                                    <option value="rechazado">Rechazado</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Observación</label>
+                                <textarea id="modalObservacion" class="form-control" rows="4"
+                                    placeholder="Escriba una observación"></textarea>
+                            </div>
+                            <input type="hidden" id="modalReciboId">
+                            <div class="d-grid">
+                                <button type="button" class="btn-guardar" id="btnGuardar">Guardar</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     @include('partials.footer')
+    @vite(['resources/js/recibo-pago.js'])
 </body>
 
 </html>

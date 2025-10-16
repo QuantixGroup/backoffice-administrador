@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Socio;
 use App\Services\ApiRecibosService;
-use Illuminate\Support\Facades\Log;
 
 class RecibosController extends Controller
 {
@@ -37,11 +36,12 @@ class RecibosController extends Controller
                             'mes' => $this->obtenerNombreMes($recibo['mes'] ?? null),
                             'año' => $recibo['anio'] ?? $recibo['año'] ?? date('Y'),
                             'estado' => $recibo['estado'] ?? 'pendiente',
-                            'fecha_comprobante' => $recibo['fecha_comprobante'] ?? null
+                            'fecha_comprobante' => $recibo['fecha_comprobante'] ?? null,
+                            'archivo_comprobante' => $recibo['archivo_comprobante'] ?? null,
+                            'observacion' => $recibo['observacion'] ?? ''
                         ];
                     })->toArray();
                 } catch (\Exception $e) {
-                    Log::error("Error al obtener recibos desde API: " . $e->getMessage());
                     $recibos = [];
                 }
             }
@@ -77,12 +77,14 @@ class RecibosController extends Controller
     {
         try {
             $request->validate([
-                'estado' => 'required|in:pendiente,aceptado,rechazado'
+                'estado' => 'required|in:pendiente,aceptado,rechazado',
+                'observacion' => 'nullable|string'
             ]);
 
             $nuevoEstado = $request->input('estado');
+            $observacion = $request->input('observacion');
 
-            $resultado = ApiRecibosService::actualizarEstadoRecibo($idPago, $nuevoEstado);
+            $resultado = ApiRecibosService::actualizarEstadoRecibo($idPago, $nuevoEstado, $observacion);
 
             if ($resultado) {
                 return response()->json([
@@ -97,10 +99,33 @@ class RecibosController extends Controller
             }
 
         } catch (\Exception $e) {
-            Log::error("Error al actualizar estado: " . $e->getMessage());
             return response()->json([
                 'success' => false,
-                'message' => 'Error: ' . $e->getMessage()
+                'message' => 'Error al procesar la solicitud'
+            ], 500);
+        }
+    }
+
+    public function verPdf($idPago)
+    {
+        try {
+            $pdfData = ApiRecibosService::obtenerPdfRecibo($idPago);
+
+            if ($pdfData) {
+                return response($pdfData)
+                    ->header('Content-Type', 'application/pdf')
+                    ->header('Content-Disposition', 'inline; filename="recibo_' . $idPago . '.pdf"');
+            }
+
+            return response()->json([
+                'success' => false,
+                'message' => 'No se encontró ningún PDF'
+            ], 404);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al encontrar algún PDF'
             ], 500);
         }
     }

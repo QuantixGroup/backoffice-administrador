@@ -79,6 +79,15 @@
                                 </tbody>
                             </table>
                         </div>
+                        <div class="action-buttons">
+                            <div class="row">
+                                <div class="col-12 text-end">
+                                    <button id="abrirDetalleBtn" class="btn-abrir" disabled>
+                                        Ver Detalles
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

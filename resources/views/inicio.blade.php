@@ -46,7 +46,7 @@
                                 </thead>
                                 <tbody>
                                     @forelse($sociosPendientes as $socio)
-                                        <tr class="user-row" data-cedula="{{ $socio->cedula }}">
+                                        <tr class="table-row-selectable" data-cedula="{{ $socio->cedula }}">
                                             <td>{{ $socio->nombre ?? 'N/A' }}</td>
                                             <td>{{ $socio->apellido ?? 'N/A' }}</td>
                                             <td>{{ $socio->cedula ?? 'N/A' }}</td>

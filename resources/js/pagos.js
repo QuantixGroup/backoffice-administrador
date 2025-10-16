@@ -2,7 +2,7 @@ let rowSelector;
 
 document.addEventListener("DOMContentLoaded", function () {
     rowSelector = new TableRowSelector(
-        ".recibo-row",
+        ".table-row-selectable",
         "abrirReciboBtn",
         "cooperativista"
     );

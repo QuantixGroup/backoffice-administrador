@@ -1,138 +1,70 @@
 class CooperativistaSearcher {
     constructor() {
-        this.searchInput = document.getElementById("searchCedula");
-        this.clearButton = document.getElementById("clearSearch");
-        this.searchResults = document.getElementById("searchResults");
-        this.table = document.getElementById("cooperativistasTable");
-        this.tbody = this.table?.querySelector("tbody");
-        this.allRows = [];
-        this.visibleCount = 0;
-        this.totalCount = 0;
-
-        if (this.searchInput && this.table) {
-            this.init();
+        this.input = document.getElementById("searchCedula");
+        this.clear = document.getElementById("clearSearch");
+        this.tabl = document.getElementById("cooperativistasTable");
+        this.tbody = this.tabl?.querySelector("tbody");
+        if (this.input && this.tbody) {
+            this.rows = Array.from(this.tbody.querySelectorAll("tr"));
+            this.bind();
         }
     }
-
-    init() {
-        this.allRows = Array.from(this.tbody.querySelectorAll("tr"));
-        this.totalCount = this.allRows.filter(
-            (row) => !row.querySelector("[colspan]")
-        ).length;
-        this.visibleCount = this.totalCount;
-
-        this.bindEvents();
-    }
-
-    bindEvents() {
-        this.searchInput.addEventListener("input", (e) => {
-            this.performSearch(e.target.value.trim());
-        });
-
-        this.clearButton.addEventListener("click", () => {
-            this.clearSearch();
-        });
-
-        this.searchInput.addEventListener("keypress", (e) => {
-            const char = String.fromCharCode(e.which);
-            if (!/[0-9]/.test(char)) {
-                e.preventDefault();
-            }
-        });
-
-        this.searchInput.addEventListener("keydown", (e) => {
-            if (e.key === "Escape") {
-                this.clearSearch();
-            }
+    bind() {
+        this.input.addEventListener("input", (e) =>
+            this.search(e.target.value.trim())
+        );
+        this.clear.addEventListener("click", (_) => this.reset());
+        this.input.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") this.reset();
         });
     }
-
-    performSearch(searchTerm) {
-        if (!searchTerm) {
-            this.showAllRows();
-            return;
-        }
-
-        let foundRows = [];
-        let hasResults = false;
-
-        this.allRows.forEach((row) => {
-            if (row.querySelector("[colspan]")) {
-                row.style.display = "none";
+    search(q) {
+        if (!q) return this.reset();
+        let found = false;
+        this.rows.forEach((r) => {
+            if (r.querySelector("[colspan]")) {
+                r.style.display = "none";
                 return;
             }
-
-            const cedula = row.getAttribute("data-cedula") || "";
-
-            if (cedula.includes(searchTerm)) {
-                row.style.display = "";
-                foundRows.push(row);
-                hasResults = true;
-            } else {
-                row.style.display = "none";
-            }
+            const c = r.getAttribute("data-cedula") || "";
+            const ok = c.includes(q);
+            r.style.display = ok ? "" : "none";
+            if (ok) found = true;
         });
-
-        this.visibleCount = foundRows.length;
-        this.updateResultsDisplay(searchTerm);
-
-        if (!hasResults) {
-            this.showNoResultsMessage(searchTerm);
-        } else {
-            this.hideNoResultsMessage();
-        }
+        if (!found) this.showNoResults(q);
+        else this.hideNoResults();
     }
-
-    showAllRows() {
-        this.allRows.forEach((row) => {
-            if (row.classList.contains("no-results-row")) {
-                row.style.display = "none";
-            } else if (
-                !row.querySelector("[colspan]") ||
-                row.classList.contains("empty-message-row")
-            ) {
-                row.style.display = "";
-            }
-        });
-
-        this.visibleCount = this.totalCount;
-        this.updateResultsDisplay();
+    reset() {
+        this.input.value = "";
+        this.rows.forEach((r) => (r.style.display = ""));
+        this.hideNoResults();
+        this.input.focus();
     }
-
-    showNoResultsMessage(searchTerm) {
-        this.hideNoResultsMessage();
-
-        const noResultsRow = document.createElement("tr");
-        noResultsRow.classList.add("no-results-row");
-        noResultsRow.innerHTML = `
-            <td colspan="8" class="text-center text-muted py-4">
-                <i class="fas fa-search me-2"></i>
-                No se encontraron cooperativistas con la cédula "<strong>${searchTerm}</strong>"
-            </td>
-        `;
-
-        this.tbody.appendChild(noResultsRow);
+    showNoResults(q) {
+        this.hideNoResults();
+        const tr = document.createElement("tr");
+        tr.className = "no-results-row";
+        tr.innerHTML = `<td colspan="8" class="text-center text-muted py-4"><i class="fas fa-search me-2"></i>No se encontraron cooperativistas con la cédula "<strong>${q}</strong>"</td>`;
+        this.tbody.appendChild(tr);
     }
-
-    hideNoResultsMessage() {
-        const noResultsRow = this.tbody.querySelector(".no-results-row");
-        if (noResultsRow) {
-            noResultsRow.remove();
-        }
-    }
-
-    clearSearch() {
-        this.searchInput.value = "";
-        this.searchInput.focus();
-        this.showAllRows();
-    }
-
-    updateResultsDisplay(searchTerm = "") {
-        if (!this.searchResults) return;
-        this.searchResults.innerHTML = "";
+    hideNoResults() {
+        const n = this.tbody.querySelector(".no-results-row");
+        if (n) n.remove();
     }
 }
 
-document.addEventListener("DOMContentLoaded", function () {
+let rowSelector;
+document.addEventListener("DOMContentLoaded", () => {
     new CooperativistaSearcher();
+    rowSelector = new TableRowSelector(
+        ".table-row-selectable",
+        "abrirDetalleBtn",
+        "cedula"
+    );
+    if (!document.getElementById("cooperativistasTable")) {
+        window.abrirDetalle = () => {
+            const v = rowSelector?.getSelectedValue();
+            if (v) window.location.href = `/socios/${v}/detalle`;
+        };
+    }
 });

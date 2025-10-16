@@ -46,7 +46,7 @@
                                 </thead>
                                 <tbody>
                                     <?php $__empty_1 = true; $__currentLoopData = $sociosPendientes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $socio): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                                        <tr class="user-row" data-cedula="<?php echo e($socio->cedula); ?>">
+                                        <tr class="table-row-selectable" data-cedula="<?php echo e($socio->cedula); ?>">
                                             <td><?php echo e($socio->nombre ?? 'N/A'); ?></td>
                                             <td><?php echo e($socio->apellido ?? 'N/A'); ?></td>
                                             <td><?php echo e($socio->cedula ?? 'N/A'); ?></td>

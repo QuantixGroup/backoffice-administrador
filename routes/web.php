@@ -85,5 +85,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/recibos', [RecibosController::class, 'index'])->name('recibos.pagos');
     Route::get('/recibos/detalle', [RecibosController::class, 'detalle'])->name('recibos.detalle');
     Route::put('/recibos/actualizar-estado/{idPago}', [RecibosController::class, 'actualizarEstado'])->name('recibos.actualizar.estado');
+    Route::get('/recibos/pdf/{idPago}', [RecibosController::class, 'verPdf'])->name('recibos.ver.pdf');
     Route::get('/logout', [UserController::class, 'logout'])->name('logout');
 });

@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 
 class ApiRecibosService
 {
@@ -46,7 +45,6 @@ class ApiRecibosService
             return [];
 
         } catch (\Exception $e) {
-            Log::error("Error al consultar recibos: " . $e->getMessage());
             return [];
         }
     }
@@ -83,7 +81,6 @@ class ApiRecibosService
             ];
 
         } catch (\Exception $e) {
-            Log::error("Error al calcular estadísticas de recibos: " . $e->getMessage());
             return [
                 'total' => 0,
                 'pendientes' => 0,
@@ -93,7 +90,7 @@ class ApiRecibosService
         }
     }
 
-    public static function actualizarEstadoRecibo($idPago, $nuevoEstado)
+    public static function actualizarEstadoRecibo($idPago, $nuevoEstado, $observacion = null)
     {
         try {
             if (!self::$apiUrl) {
@@ -107,11 +104,14 @@ class ApiRecibosService
                 $headers['Authorization'] = 'Bearer ' . self::$apiToken;
             }
 
+            $payload = ['estado' => $nuevoEstado];
+            if ($observacion !== null) {
+                $payload['observacion'] = $observacion;
+            }
+
             $response = Http::withHeaders($headers)
                 ->timeout(10)
-                ->put($url, [
-                    'estado' => $nuevoEstado
-                ]);
+                ->put($url, $payload);
 
             if ($response->successful()) {
                 return true;
@@ -120,8 +120,36 @@ class ApiRecibosService
             return false;
 
         } catch (\Exception $e) {
-            Log::error("Error al actualizar estado: " . $e->getMessage());
             return false;
+        }
+    }
+
+    public static function obtenerPdfRecibo($idPago)
+    {
+        try {
+            if (!self::$apiUrl) {
+                self::$apiUrl = config('services.api_cooperativista.url', 'http://127.0.0.1:8001/api');
+            }
+
+            $url = self::$apiUrl . '/recibos/' . $idPago . '/pdf';
+
+            $headers = ['Accept' => 'application/pdf'];
+            if (self::$apiToken) {
+                $headers['Authorization'] = 'Bearer ' . self::$apiToken;
+            }
+
+            $response = Http::withHeaders($headers)
+                ->timeout(30)
+                ->get($url);
+
+            if ($response->successful()) {
+                return $response->body();
+            }
+
+            return null;
+
+        } catch (\Exception $e) {
+            return null;
         }
     }
 }

@@ -74,7 +74,7 @@ body.dark .btn-login {
 
 .btn-abrir,
 .btn-ver-recibo,
-.btn-guardar-cambios {
+.btn-guardar {
     @include btn-base;
     padding: 0.75rem 2rem;
     font-weight: 500;
@@ -88,13 +88,13 @@ body.dark .btn-login {
 
 .btn-abrir:hover:not(:disabled),
 .btn-ver-recibo:hover:not(:disabled),
-.btn-guardar-cambios:hover:not(:disabled) {
+.btn-guardar:hover:not(:disabled) {
     @include btn-hover-effect;
 }
 
 .btn-abrir:disabled,
 .btn-ver-recibo:disabled,
-.btn-guardar-cambios:disabled {
+.btn-guardar:disabled {
     background-color: $bg-color-default;
     color: $text-color-secondary;
     opacity: 0.6;
@@ -322,6 +322,7 @@ body.dark .btn-login {
     .btn-reject,
     .btn-approve,
     .btn-abrir,
+    .btn-guardar,
     .btn-ver-recibo {
         display: block;
         width: 100%;
@@ -334,6 +335,7 @@ body.dark .btn-login {
     .btn-reject,
     .btn-approve,
     .btn-abrir,
+    .btn-guardar,
     .btn-ver-recibo {
         display: block;
         width: 100%;

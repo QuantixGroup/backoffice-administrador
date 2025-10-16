@@ -69,8 +69,16 @@ body.dark .table-header {
 
 .table tbody tr {
     cursor: pointer;
+    background-color: $bg-color-secondary;
     transition: background-color 0.2s ease;
 }
+
+html[data-bs-theme="dark"] .table tbody tr,
+body.dark .table tbody tr {
+    background-color: $bg-color-primary-dark;
+    color: $text-color-primary-dark;
+}
+
 
 .table tbody tr:hover {
     background-color: $bg-color-tertiary;
@@ -81,15 +89,9 @@ body.dark .table-header {
     }
 }
 
-.table tbody tr.selected {
-    background-color: $bg-color-success;
-    border-left: 4px solid $bg-color-primary;
-
-    html[data-bs-theme="dark"] &,
-    body.dark & {
-        background-color: $bg-color-success;
-        border-left: 4px solid $bg-color-primary-dark;
-    }
+.table tbody tr,
+.table-row-selectable {
+    @include table-row-selectable;
 }
 
 @media (max-width: 768px) {
@@ -114,6 +116,7 @@ body.dark .table-header {
     .table-header h2 {
         font-size: 1.25rem;
     }
+
 }
 
 @media (max-width: 480px) {
