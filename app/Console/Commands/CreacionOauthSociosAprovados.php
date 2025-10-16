@@ -7,7 +7,7 @@ use App\Models\Socio;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
-class CreateOauthClientsForApprovedSocios extends Command
+class CreacionOauthSociosAprovados extends Command
 {
     /**
      * The name and signature of the console command.
@@ -21,7 +21,7 @@ class CreateOauthClientsForApprovedSocios extends Command
      *
      * @var string
      */
-    protected $description = 'Create oauth password clients for approved socios without credentials.';
+    protected $description = 'Crear clientes OAuth (password) para socios aprobados sin credenciales.';
 
     /**
      * Execute the console command.
@@ -29,14 +29,15 @@ class CreateOauthClientsForApprovedSocios extends Command
     public function handle(): int
     {
         $socios = Socio::where('estado', 'aprobado')->get();
-
-        $this->info('Found ' . $socios->count() . ' approved socios to process');
+        $count = $socios->count();
+        $this->info("Se encontraron {$count} socios aprobados para procesar");
 
         foreach ($socios as $socio) {
+            $cedula = $socio->cedula;
             try {
-                $usuario = \App\Models\UsuariosNormales::where('cedula', $socio->cedula)->first();
-
+                $usuario = \App\Models\UsuariosNormales::where('cedula', $cedula)->first();
                 if (!$usuario) {
+                    $this->line("Omitiendo {$cedula}: no existe registro de usuario");
                     continue;
                 }
 
@@ -46,21 +47,21 @@ class CreateOauthClientsForApprovedSocios extends Command
                     ->where('revoked', 0)
                     ->first();
 
-                if ($existingClient && !$this->option('force')) {
-                    continue;
-                }
-
-                if ($this->option('force') && $existingClient) {
-                    DB::table('oauth_clients')
-                        ->where('id', $existingClient->id)
-                        ->update(['revoked' => 1]);
+                if ($existingClient) {
+                    if ($this->option('force')) {
+                        DB::table('oauth_clients')->where('id', $existingClient->id)->update(['revoked' => 1]);
+                        $this->line("Cliente existente revocado para {$cedula}");
+                    } else {
+                        $this->line("El cliente ya existe para {$cedula}, omitiendo");
+                        continue;
+                    }
                 }
 
                 $secret = Str::random(40);
                 $now = now();
                 $clientId = DB::table('oauth_clients')->insertGetId([
                     'user_id' => $usuario->id,
-                    'name' => 'Socio ' . $socio->cedula,
+                    'name' => 'Socio ' . $cedula,
                     'secret' => $secret,
                     'provider' => 'users',
                     'redirect' => 'http://localhost',
@@ -71,9 +72,9 @@ class CreateOauthClientsForApprovedSocios extends Command
                     'updated_at' => $now,
                 ]);
 
-                $this->info('Created OAuth client for ' . $socio->cedula . ' (Client ID: ' . $clientId . ')');
-            } catch (\Exception $e) {
-                $this->error('Failed for ' . $socio->cedula . ': ' . $e->getMessage());
+                $this->info("Cliente OAuth creado para {$cedula} (ID cliente: {$clientId})");
+            } catch (\Throwable $e) {
+                $this->error("Error al procesar {$cedula}: " . $e->getMessage());
             }
         }
 

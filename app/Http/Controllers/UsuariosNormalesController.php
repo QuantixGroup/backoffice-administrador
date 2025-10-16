@@ -40,7 +40,10 @@ class UsuariosNormalesController extends Controller
 
         if ($usuarioExistente === null) {
             $nuevoUsuario = new UsuariosNormales();
-            $nuevoUsuario->name = $socioEncontrado->nombre . ' ' . $socioEncontrado->apellido;
+            $partesNombre = preg_split('/\s+/', trim($socioEncontrado->nombre));
+
+            $nuevoUsuario->name = $partesNombre[0];
+            $nuevoUsuario->apellido = trim($socioEncontrado->apellido);
             $nuevoUsuario->cedula = $socioEncontrado->cedula;
             $nuevoUsuario->email = $socioEncontrado->email;
             $nuevoUsuario->password = Hash::make($socioEncontrado->contraseña ?: $socioEncontrado->cedula);
@@ -74,7 +77,6 @@ class UsuariosNormalesController extends Controller
                 ]);
             }
         } catch (\Throwable $e) {
-            Log::error('Error creando oauth client: ' . $e->getMessage());
         }
 
         $socioEncontrado->estado = 'aprobado';

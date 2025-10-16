@@ -14,6 +14,7 @@ class UsuariosNormales extends Model
 
     protected $fillable = [
         'name',
+        'apellido',
         'cedula',
         'email',
         'password',
