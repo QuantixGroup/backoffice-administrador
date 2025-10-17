@@ -12,10 +12,8 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 
-
 class UsuariosNormalesController extends Controller
 {
-
     public function mostrarPendientes()
     {
         $sociosPendientes = Socio::where('estado', 'pendiente')->get();
@@ -42,7 +40,7 @@ class UsuariosNormalesController extends Controller
             $nuevoUsuario = new UsuariosNormales();
             $partesNombre = preg_split('/\s+/', trim($socioEncontrado->nombre));
 
-            $nuevoUsuario->name = $partesNombre[0];
+            $nuevoUsuario->nombre = $partesNombre[0];
             $nuevoUsuario->apellido = trim($socioEncontrado->apellido);
             $nuevoUsuario->cedula = $socioEncontrado->cedula;
             $nuevoUsuario->email = $socioEncontrado->email;
