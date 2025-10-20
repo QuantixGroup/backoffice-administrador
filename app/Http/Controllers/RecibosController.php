@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use App\Models\Socio;
 use App\Services\ApiRecibosService;
 
@@ -89,12 +90,12 @@ class RecibosController extends Controller
             if ($resultado) {
                 return response()->json([
                     'success' => true,
-                    'message' => 'Estado actualizado correctamente'
+                    'message' => 'Se actualizó el recibo correctamente'
                 ]);
             } else {
                 return response()->json([
                     'success' => false,
-                    'message' => 'No se pudo actualizar el estado'
+                    'message' => 'No se pudo actualizar el estado del recibo'
                 ], 500);
             }
 
@@ -119,13 +120,14 @@ class RecibosController extends Controller
 
             return response()->json([
                 'success' => false,
-                'message' => 'No se encontró ningún PDF'
+                'message' => 'No se encontró ningún archivo PDF'
             ], 404);
 
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Error al encontrar algún PDF'
+                'message' => 'Error al encontrar algún archivo PDF',
+                'error' => $e->getMessage()
             ], 500);
         }
     }

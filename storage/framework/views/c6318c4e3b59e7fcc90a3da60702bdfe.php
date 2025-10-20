@@ -85,8 +85,8 @@
                         <div class="action-buttons">
                             <div class="row">
                                 <div class="col-12 text-end">
-                                    <button id="abrirDetalleBtn" class="btn-abrir" disabled>
-                                        Ver Detalles
+                                    <button id="accionBtn" class="btn-delete" disabled>
+                                        Eliminar Usuario
                                     </button>
                                 </div>
                             </div>
@@ -98,6 +98,23 @@
     </div>
 
     <?php echo $__env->make('partials.footer', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal-content">
+            <div class="modal-title">¿Está seguro que desea eliminar la cuenta de este usuario?</div>
+            <div class="modal-buttons">
+                <button class="btn-modal-cancel" onclick="hideDeleteModal()">Cancelar</button>
+                <button class="btn-modal-confirm btn-delete-confirm" id="confirmDeleteBtn"
+                    onclick="deleteUser()">Eliminar</button>
+            </div>
+        </div>
+    </div>
+
+    <form id="deleteForm" method="POST" action="" style="display: none;">
+        <?php echo csrf_field(); ?>
+    </form>
+
+
 </body>
 
 </html><?php /**PATH C:\xampp\htdocs\proyectoFinal\backoffice-administrador\resources\views/listado-cooperativistas.blade.php ENDPATH**/ ?>

@@ -12,8 +12,8 @@
             <a class="nav-link <?php echo e(request()->routeIs('perfil') ? 'active' : ''); ?>" href="<?php echo e(route('perfil')); ?>">
                 <i class="fa-solid fa-user"></i>MI PERFIL
             </a>
-            <a class="nav-link <?php echo e(request()->routeIs('socios.pendientes') ? 'active' : ''); ?>"
-                href="<?php echo e(route('socios.pendientes')); ?>">
+            <a class="nav-link <?php echo e(request()->routeIs('socios.aprobados') ? 'active' : ''); ?>"
+                href="<?php echo e(route('socios.aprobados')); ?>">
                 <i class="fa-solid fa-user-group"></i>COOPERATIVISTAS
             </a>
             <a class="nav-link <?php echo e(request()->routeIs('recibos.*') ? 'active' : ''); ?>"

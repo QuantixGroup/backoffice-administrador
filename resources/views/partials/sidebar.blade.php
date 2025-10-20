@@ -12,8 +12,8 @@
             <a class="nav-link {{ request()->routeIs('perfil') ? 'active' : '' }}" href="{{ route('perfil') }}">
                 <i class="fa-solid fa-user"></i>MI PERFIL
             </a>
-            <a class="nav-link {{ request()->routeIs('socios.pendientes') ? 'active' : '' }}"
-                href="{{ route('socios.pendientes') }}">
+            <a class="nav-link {{ request()->routeIs('socios.aprobados') ? 'active' : '' }}"
+                href="{{ route('socios.aprobados') }}">
                 <i class="fa-solid fa-user-group"></i>COOPERATIVISTAS
             </a>
             <a class="nav-link {{ request()->routeIs('recibos.*') ? 'active' : '' }}"

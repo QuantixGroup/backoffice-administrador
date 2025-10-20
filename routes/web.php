@@ -75,13 +75,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/perfil', [UserController::class, 'showProfile'])->name('perfil');
     Route::post('/perfil/update', [UserController::class, 'updateProfile'])->name('perfil.update');
     Route::post('/perfil/upload-image', [UserController::class, 'uploadProfileImage'])->name('perfil.upload-image');
-    Route::get('/socios/pendientes', function () {
+    Route::get('/socios/aprobados', function () {
         $sociosAprobados = Socio::where('estado', 'aprobado')->get();
         return view('listado-cooperativistas', compact('sociosAprobados'));
-    })->name('socios.pendientes');
+    })->name('socios.aprobados');
     Route::get('/socios/{cedula}/detalle', [UsuariosNormalesController::class, 'mostrarDetalle'])->name('socios.detalle');
     Route::post('/socios/{cedula}/aprobar', [UsuariosNormalesController::class, 'aprobarPorCedula'])->name('socios.aprobar');
     Route::post('/socios/{cedula}/rechazar', [UsuariosNormalesController::class, 'rechazarPorCedula'])->name('socios.rechazar');
+    Route::post('/socios/{cedula}/eliminar', [UsuariosNormalesController::class, 'eliminarPorCedula'])->name('socios.eliminar');
     Route::get('/recibos', [RecibosController::class, 'index'])->name('recibos.pagos');
     Route::get('/recibos/detalle', [RecibosController::class, 'detalle'])->name('recibos.detalle');
     Route::put('/recibos/actualizar-estado/{idPago}', [RecibosController::class, 'actualizarEstado'])->name('recibos.actualizar.estado');

@@ -2,47 +2,33 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\DB;
 
 class ApiRecibosService
 {
-    private static $apiUrl;
-    private static $apiToken;
-
-    public function __construct()
-    {
-        self::$apiUrl = config('services.api_cooperativista.url', 'http://127.0.0.1:8001/api');
-        self::$apiToken = config('services.api_cooperativista.token');
-    }
-
     public static function getRecibosPorCedula($cedula)
     {
         try {
-            if (!self::$apiUrl) {
-                self::$apiUrl = config('services.api_cooperativista.url', 'http://127.0.0.1:8001/api');
-            }
+            $recibos = DB::table('pagos_mensuales')
+                ->where('cedula', $cedula)
+                ->orderBy('fecha_comprobante', 'desc')
+                ->get()
+                ->map(function ($recibo) {
+                    return [
+                        'id_pago' => $recibo->id_pago,
+                        'cedula' => $recibo->cedula,
+                        'monto' => $recibo->monto,
+                        'fecha_comprobante' => $recibo->fecha_comprobante,
+                        'archivo_comprobante' => $recibo->archivo_comprobante,
+                        'estado' => $recibo->estado,
+                        'mes' => $recibo->mes,
+                        'anio' => $recibo->anio,
+                        'observacion' => $recibo->observacion ?? ''
+                    ];
+                })
+                ->toArray();
 
-            $url = self::$apiUrl . '/recibos/' . $cedula;
-
-            $headers = [];
-            if (self::$apiToken) {
-                $headers['Authorization'] = 'Bearer ' . self::$apiToken;
-            }
-
-            $response = Http::withHeaders($headers)
-                ->timeout(10)
-                ->get($url);
-
-            if ($response->successful()) {
-                $data = $response->json();
-                return $data;
-            }
-
-            if ($response->status() === 404) {
-                return [];
-            }
-
-            return [];
+            return $recibos;
 
         } catch (\Exception $e) {
             return [];
@@ -63,7 +49,7 @@ class ApiRecibosService
                 if (isset($recibo['estado'])) {
                     if ($recibo['estado'] === 'pendiente') {
                         $pendientes++;
-                    } elseif ($recibo['estado'] === 'pagado' || $recibo['estado'] === 'aprobado') {
+                    } elseif ($recibo['estado'] === 'pagado' || $recibo['estado'] === 'aceptado') {
                         $pagados++;
                     }
                 }
@@ -93,31 +79,17 @@ class ApiRecibosService
     public static function actualizarEstadoRecibo($idPago, $nuevoEstado, $observacion = null)
     {
         try {
-            if (!self::$apiUrl) {
-                self::$apiUrl = config('services.api_cooperativista.url', 'http://127.0.0.1:8001/api');
-            }
+            $updateData = ['estado' => $nuevoEstado];
 
-            $url = self::$apiUrl . '/recibos/' . $idPago;
-
-            $headers = ['Accept' => 'application/json'];
-            if (self::$apiToken) {
-                $headers['Authorization'] = 'Bearer ' . self::$apiToken;
-            }
-
-            $payload = ['estado' => $nuevoEstado];
             if ($observacion !== null) {
-                $payload['observacion'] = $observacion;
+                $updateData['observacion'] = $observacion;
             }
 
-            $response = Http::withHeaders($headers)
-                ->timeout(10)
-                ->put($url, $payload);
+            $updated = DB::table('pagos_mensuales')
+                ->where('id_pago', $idPago)
+                ->update($updateData);
 
-            if ($response->successful()) {
-                return true;
-            }
-
-            return false;
+            return $updated > 0;
 
         } catch (\Exception $e) {
             return false;
@@ -127,26 +99,45 @@ class ApiRecibosService
     public static function obtenerPdfRecibo($idPago)
     {
         try {
-            if (!self::$apiUrl) {
-                self::$apiUrl = config('services.api_cooperativista.url', 'http://127.0.0.1:8001/api');
+            $pago = DB::table('pagos_mensuales')
+                ->where('id_pago', $idPago)
+                ->first();
+
+            if (!$pago || !$pago->archivo_comprobante) {
+                return null;
             }
 
-            $url = self::$apiUrl . '/recibos/' . $idPago . '/pdf';
+            $rutaRelativa = $pago->archivo_comprobante;
 
-            $headers = ['Accept' => 'application/pdf'];
-            if (self::$apiToken) {
-                $headers['Authorization'] = 'Bearer ' . self::$apiToken;
+            $ubicacionesPosibles = [
+                storage_path('app/public/' . $rutaRelativa),
+                base_path('../api-usuarios/storage/app/public/' . $rutaRelativa),
+                base_path('../api-cooperativa/storage/app/public/' . $rutaRelativa),
+                $rutaRelativa,
+                public_path($rutaRelativa),
+                public_path('storage/' . $rutaRelativa),
+            ];
+
+            $rutaArchivo = null;
+
+            foreach ($ubicacionesPosibles as $ubicacion) {
+                if (file_exists($ubicacion)) {
+                    $rutaArchivo = $ubicacion;
+                    break;
+                }
             }
 
-            $response = Http::withHeaders($headers)
-                ->timeout(30)
-                ->get($url);
-
-            if ($response->successful()) {
-                return $response->body();
+            if (!$rutaArchivo) {
+                return null;
             }
 
-            return null;
+            $contenidoPdf = file_get_contents($rutaArchivo);
+
+            if ($contenidoPdf === false) {
+                return null;
+            }
+
+            return $contenidoPdf;
 
         } catch (\Exception $e) {
             return null;

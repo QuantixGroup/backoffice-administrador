@@ -152,6 +152,9 @@
     </div>
 
 
+
+
+
     <div class="modal-overlay" id="rejectModal">
         <div class="modal-content">
             <div class="modal-title">¿Está seguro que desea rechazar la solicitud?</div>
@@ -169,6 +172,8 @@
     <form id="rejectForm" method="POST" action="<?php echo e(route('socios.rechazar', $socio->cedula)); ?>" style="display: none;">
         <?php echo csrf_field(); ?>
     </form>
+
+
 
     <?php echo $__env->make('partials.footer', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 </body>

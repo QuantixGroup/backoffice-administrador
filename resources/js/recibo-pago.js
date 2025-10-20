@@ -1,9 +1,9 @@
 let rowSelector;
 
 document.addEventListener("DOMContentLoaded", () => {
-    const modal = new bootstrap.Modal(
-        document.getElementById("modalReciboDetalle")
-    );
+    const modalEl = document.getElementById("modalReciboDetalle");
+    if (!modalEl) return;
+    const modal = new bootstrap.Modal(modalEl);
     const $ = (s) => document.querySelector(s);
     const getData = (el, k) => el?.dataset[k] || "";
 
@@ -28,9 +28,14 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     $("#btnGuardar")?.addEventListener("click", async () => {
-        const id = $("#modalReciboId").value;
-        const estado = $("#modalEstado").value;
-        const observacion = $("#modalObservacion").value || "";
+        const modalReciboId = document.getElementById("modalReciboId");
+        const modalEstado = document.getElementById("modalEstado");
+        const modalObservacion = document.getElementById("modalObservacion");
+        const id = modalReciboId ? modalReciboId.value : null;
+        const estado = modalEstado ? modalEstado.value : null;
+        const observacion = modalObservacion
+            ? modalObservacion.value || ""
+            : "";
 
         if (estado === "rechazado" && !observacion.trim())
             return alert("Tiene que ingresar el motivo del rechazo del pago");

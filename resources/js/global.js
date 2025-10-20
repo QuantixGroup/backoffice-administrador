@@ -1,11 +1,21 @@
 const showSuccessNotification = (m, d = 4e3) => {
-    const n = document.getElementById("successNotification"),
-        t = document.getElementById("successMessage");
+    let n = document.getElementById("successNotification");
+    let t = document.getElementById("successMessage");
+
     if (n && t) {
         t.textContent = m;
         n.style.display = "block";
         setTimeout(() => (n.style.display = "none"), d);
+        return;
     }
+
+    n = document.createElement("div");
+    n.className = "success-notification show";
+    n.innerHTML = `<i class="fas fa-check-circle" style="margin-right:0.5rem"></i><span class="js-temp-success">${m}</span>`;
+    document.body.appendChild(n);
+    setTimeout(() => {
+        if (n.parentNode) n.remove();
+    }, d);
 };
 class TableRowSelector {
     constructor(s, b, a = "cooperativista") {

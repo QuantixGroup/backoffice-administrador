@@ -113,4 +113,29 @@ class UsuariosNormalesController extends Controller
 
         return redirect()->route('home')->with('ok', 'Usuario rechazado con éxito');
     }
+
+    public function eliminarPorCedula(string $cedula, ?Request $request = null)
+    {
+        try {
+            $result = Socio::eliminarPorCedula($cedula);
+        } catch (\Throwable $e) {
+            if ($request && $request->expectsJson()) {
+                return response()->json(['error' => 'Error al eliminar usuario'], 500);
+            }
+            return back()->with('error', 'Error al eliminar usuario');
+        }
+
+        if (!$result) {
+            if ($request && $request->expectsJson()) {
+                return response()->json(['error' => 'Solo se pueden eliminar socios aprobados'], 400);
+            }
+            return back()->with('error', 'Solo se pueden eliminar socios aprobados');
+        }
+
+        if ($request && $request->expectsJson()) {
+            return response()->json(['success' => true]);
+        }
+
+        return redirect()->route('socios.aprobados')->with('ok', 'Usuario eliminado correctamente');
+    }
 }
