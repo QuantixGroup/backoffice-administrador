@@ -75,6 +75,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/perfil', [UserController::class, 'showProfile'])->name('perfil');
     Route::post('/perfil/update', [UserController::class, 'updateProfile'])->name('perfil.update');
     Route::post('/perfil/upload-image', [UserController::class, 'uploadProfileImage'])->name('perfil.upload-image');
+    Route::post('/perfil/change-password', [UserController::class, 'changePassword'])->name('perfil.change-password');
     Route::get('/socios/aprobados', function () {
         $sociosAprobados = Socio::where('estado', 'aprobado')->get();
         return view('listado-cooperativistas', compact('sociosAprobados'));

@@ -275,3 +275,61 @@ function showNotification(message, type) {
         }
     }, 4000);
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+    const changePasswordForm = document.getElementById("change-password-form");
+
+    if (changePasswordForm) {
+        changePasswordForm.addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            const currentPassword = document.getElementById("current_password");
+            const newPassword = document.getElementById("new_password");
+            const confirmNewPassword = document.getElementById(
+                "confirm_new_password"
+            );
+
+            if (!currentPassword || !newPassword || !confirmNewPassword) {
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("current_password", currentPassword.value);
+            formData.append("new_password", newPassword.value);
+            formData.append("confirm_new_password", confirmNewPassword.value);
+
+            try {
+                const response = await fetch("/perfil/change-password", {
+                    method: "POST",
+                    headers: {
+                        "X-CSRF-TOKEN": document
+                            .querySelector('meta[name="csrf-token"]')
+                            .getAttribute("content"),
+                        Accept: "application/json",
+                    },
+                    body: formData,
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showNotification(
+                        "Contraseña actualizada correctamente",
+                        "success"
+                    );
+                    changePasswordForm.reset();
+                } else {
+                    showNotification(
+                        data.message || "Error al cambiar la contraseña",
+                        "danger"
+                    );
+                }
+            } catch (error) {
+                showNotification(
+                    "Error de conexión al cambiar la contraseña",
+                    "danger"
+                );
+            }
+        });
+    }
+});

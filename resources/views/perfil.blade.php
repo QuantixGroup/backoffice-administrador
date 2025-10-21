@@ -115,6 +115,34 @@
                             </div>
                         </div>
                     </div>
+                    <div class="password-container">
+                        <h4 class="mb-3 text-center">Cambiar Contraseña</h4>
+                        <form id="change-password-form" class="change-password-form">
+                            @csrf
+                            <div class="mb-3">
+                                <label for="current_password" class="col-form-label">Contraseña Actual</label>
+                                <input type="password" class="form-control" id="current_password"
+                                    name="current_password" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="new_password" class="col-form-label">Nueva Contraseña</label>
+                                <input type="password" class="form-control" id="new_password" name="new_password"
+                                    required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="confirm_new_password" class="col-form-label">Confirmar Nueva
+                                    Contraseña</label>
+                                <input type="password" class="form-control" id="confirm_new_password"
+                                    name="confirm_new_password" required>
+                            </div>
+
+                            <div class="text-center">
+                                <button type="submit" class="btn-cambiar-password">Cambiar Contraseña</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
