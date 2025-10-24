@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\UserController;
+use App\Http\Middleware\CambioPassword;
 use App\Http\Controllers\UsuariosNormalesController;
 use App\Http\Controllers\RecibosController;
 use App\Models\Socio;
@@ -14,7 +15,7 @@ Route::get('/login', function () {
 
 Route::post('/login', [UserController::class, 'login'])->name('login.post');
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', CambioPassword::class])->group(function () {
 
     Route::get('/', function () {
         $sociosPendientes = Socio::where('estado', 'pendiente')->get();
@@ -75,7 +76,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/perfil', [UserController::class, 'showProfile'])->name('perfil');
     Route::post('/perfil/update', [UserController::class, 'updateProfile'])->name('perfil.update');
     Route::post('/perfil/upload-image', [UserController::class, 'uploadProfileImage'])->name('perfil.upload-image');
-    Route::post('/perfil/change-password', [UserController::class, 'changePassword'])->name('perfil.change-password');
+    Route::get('/perfil/cambiar-password', [UserController::class, 'mostrarCambiarPassword'])->name('perfil.cambiar-password.form');
+    Route::post('/perfil/cambiar-password', [UserController::class, 'cambiarPassword'])->name('perfil.cambiar-password');
     Route::get('/socios/aprobados', function () {
         $sociosAprobados = Socio::where('estado', 'aprobado')->get();
         return view('listado-cooperativistas', compact('sociosAprobados'));

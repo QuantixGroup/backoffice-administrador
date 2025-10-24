@@ -12,6 +12,10 @@
             <a class="nav-link <?php echo e(request()->routeIs('perfil') ? 'active' : ''); ?>" href="<?php echo e(route('perfil')); ?>">
                 <i class="fa-solid fa-user"></i>MI PERFIL
             </a>
+            <a class="nav-link <?php echo e(request()->routeIs('perfil.cambiar-password.form') ? 'active' : ''); ?>"
+                href="<?php echo e(route('perfil.cambiar-password.form')); ?>">
+                <i class="fa-solid fa-key"></i>CAMBIAR CONTRASEÑA
+            </a>
             <a class="nav-link <?php echo e(request()->routeIs('socios.aprobados') ? 'active' : ''); ?>"
                 href="<?php echo e(route('socios.aprobados')); ?>">
                 <i class="fa-solid fa-user-group"></i>COOPERATIVISTAS

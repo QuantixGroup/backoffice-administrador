@@ -16,6 +16,12 @@ class UserController extends Controller
         $credenciales = $request->only(['cedula', 'password']);
 
         if (Auth::attempt($credenciales)) {
+            $user = Auth::user();
+
+            if (isset($user->primer_password) && $user->primer_password) {
+                return redirect()->route('perfil.cambiar-password.form')->with('warning', 'Debes cambiar tu contraseña antes de continuar.');
+            }
+
             return redirect()->route('home');
         } else {
             return redirect('/login')->with(['error' => 'Credenciales incorrectas']);
@@ -137,6 +143,17 @@ class UserController extends Controller
         ]);
     }
 
+    public function mostrarCambiarPassword()
+    {
+        $user = Auth::user();
+        $profileImageUrl = $user->profile_image ? asset('storage/' . $user->profile_image) : asset('img/admin-profile.jpg');
+
+        return view('cambiar_password', [
+            'user' => $user,
+            'profileImageUrl' => $profileImageUrl
+        ]);
+    }
+
     public function changePassword(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -171,8 +188,8 @@ class UserController extends Controller
 
             $user->password = Hash::make($request->new_password);
 
-            if (isset($user->must_change_password)) {
-                $user->must_change_password = false;
+            if (isset($user->primer_password)) {
+                $user->primer_password = false;
             }
 
             $user->save();
@@ -190,5 +207,10 @@ class UserController extends Controller
                 'message' => 'Error al cambiar la contraseña: ' . $e->getMessage()
             ], 500);
         }
+    }
+
+    public function cambiarPassword(Request $request)
+    {
+        return $this->changePassword($request);
     }
 }

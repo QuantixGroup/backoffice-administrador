@@ -38,6 +38,7 @@ class User extends Authenticatable
         'fecha_egreso',
         'fecha_nacimiento',
         'profile_image',
+        'primer_password',
     ];
 
     protected $hidden = [
@@ -50,6 +51,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'primer_password' => 'boolean',
         ];
     }
 

@@ -242,6 +242,37 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
+document.addEventListener("DOMContentLoaded", function () {
+    const toggles = document.querySelectorAll(".toggle-password");
+
+    toggles.forEach((btn) => {
+        btn.addEventListener("click", function (e) {
+            const targetSelector = btn.getAttribute("data-target");
+            if (!targetSelector) return;
+            const input = document.querySelector(targetSelector);
+            if (!input) return;
+
+            if (input.type === "password") {
+                input.type = "text";
+                const icon = btn.querySelector("i");
+                if (icon) {
+                    icon.classList.remove("fa-eye");
+                    icon.classList.add("fa-eye-slash");
+                }
+                btn.setAttribute("aria-label", "Ocultar contraseña");
+            } else {
+                input.type = "password";
+                const icon = btn.querySelector("i");
+                if (icon) {
+                    icon.classList.remove("fa-eye-slash");
+                    icon.classList.add("fa-eye");
+                }
+                btn.setAttribute("aria-label", "Mostrar contraseña");
+            }
+        });
+    });
+});
+
 function showNotification(message, type) {
     const notification = document.createElement("div");
     notification.className = "success-notification";
@@ -299,7 +330,7 @@ document.addEventListener("DOMContentLoaded", function () {
             formData.append("confirm_new_password", confirmNewPassword.value);
 
             try {
-                const response = await fetch("/perfil/change-password", {
+                const response = await fetch("/perfil/cambiar-password", {
                     method: "POST",
                     headers: {
                         "X-CSRF-TOKEN": document
@@ -318,6 +349,9 @@ document.addEventListener("DOMContentLoaded", function () {
                         "success"
                     );
                     changePasswordForm.reset();
+                    setTimeout(() => {
+                        window.location.href = "/";
+                    }, 1200);
                 } else {
                     showNotification(
                         data.message || "Error al cambiar la contraseña",
