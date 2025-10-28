@@ -1,0 +1,69 @@
+name: tests
+
+on:
+  push:
+    branches:
+      - test
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    env:
+      DB_CONNECTION: sqlite
+      DB_DATABASE: ":memory:"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          tools: composer:v2
+          coverage: xdebug
+          extensions: pdo, pdo_sqlite
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install Node Dependencies
+        run: npm ci
+
+      - name: Install Dependencies
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Copy Environment File
+        run: cp .env.example .env
+
+      - name: Generate Application Key
+        run: php artisan key:generate --force
+
+      - name: Generate Passport keys
+        run: php artisan passport:keys --force || true
+
+      - name: Configure Database
+        run: |
+          php artisan config:clear
+          php artisan cache:clear
+
+      - name: Build Assets
+        run: npm run production
+
+      - name: Run Tests
+        shell: bash
+        run: |
+          if [ -x ./vendor/bin/pest ]; then
+            ./vendor/bin/pest --colors=always
+          elif [ -x ./vendor/bin/phpunit ]; then
+            ./vendor/bin/phpunit --colors=always
+          else
+            echo "No test runner found (pest/phpunit) - skipping tests"
+          fi
