@@ -15,6 +15,9 @@ jobs:
     env:
       DB_CONNECTION: sqlite
       DB_DATABASE: ":memory:"
+      CACHE_DRIVER: array
+      SESSION_DRIVER: array
+      QUEUE_CONNECTION: sync
 
     steps:
       - name: Checkout
