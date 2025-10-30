@@ -1,37 +1,44 @@
 document.addEventListener("DOMContentLoaded", function () {
     const rememberCheckbox = document.getElementById("remember");
+    const cedulaInput = document.getElementById("cedula");
+    const loginForm = document.querySelector("form");
+    const forgotPasswordLink = document.querySelector('a[href="#"]');
 
-    if (localStorage.getItem("rememberLogin") === "true") {
-        rememberCheckbox.checked = true;
-        const savedUser = localStorage.getItem("savedUser");
-        if (savedUser) {
-            document.getElementById("cedula").value = savedUser;
+    if (rememberCheckbox) {
+        if (localStorage.getItem("rememberLogin") === "true") {
+            rememberCheckbox.checked = true;
+            const savedUser = localStorage.getItem("savedUser");
+            if (savedUser && cedulaInput) {
+                cedulaInput.value = savedUser;
+            }
         }
+
+        rememberCheckbox.addEventListener("change", function () {
+            if (this.checked) {
+                localStorage.setItem("rememberLogin", "true");
+            } else {
+                localStorage.removeItem("rememberLogin");
+                localStorage.removeItem("savedUser");
+            }
+        });
     }
 
-    rememberCheckbox.addEventListener("change", function () {
-        if (this.checked) {
-            localStorage.setItem("rememberLogin", "true");
-        } else {
-            localStorage.removeItem("rememberLogin");
-            localStorage.removeItem("savedUser");
-        }
-    });
+    if (loginForm) {
+        loginForm.addEventListener("submit", function () {
+            if (rememberCheckbox && rememberCheckbox.checked && cedulaInput) {
+                const cedulaValue = cedulaInput.value;
+                localStorage.setItem("savedUser", cedulaValue);
+            }
+        });
+    }
 
-    const loginForm = document.querySelector("form");
-    loginForm.addEventListener("submit", function () {
-        if (rememberCheckbox.checked) {
-            const cedulaValue = document.getElementById("cedula").value;
-            localStorage.setItem("savedUser", cedulaValue);
-        }
-    });
-
-    const forgotPasswordLink = document.querySelector('a[href="#"]');
-    forgotPasswordLink.addEventListener("click", function (e) {
-        e.preventDefault();
-        const el = document.getElementById("forgotPasswordModal");
-        if (el) new bootstrap.Modal(el).show();
-    });
+    if (forgotPasswordLink) {
+        forgotPasswordLink.addEventListener("click", function (e) {
+            e.preventDefault();
+            const el = document.getElementById("forgotPasswordModal");
+            if (el) new bootstrap.Modal(el).show();
+        });
+    }
 });
 
 function togglePassword() {
@@ -94,23 +101,27 @@ function sendRecoveryEmail() {
 function addLoginEffects() {
     const cedulaInput = document.getElementById("cedula");
     const passwordInput = document.getElementById("password");
-
-    [cedulaInput, passwordInput].forEach((input) => {
+    const inputs = [cedulaInput, passwordInput].filter(Boolean);
+    inputs.forEach((input) => {
         input.addEventListener("focus", function () {
-            this.parentElement.classList.add("input-focused");
+            if (this.parentElement)
+                this.parentElement.classList.add("input-focused");
         });
 
         input.addEventListener("blur", function () {
-            this.parentElement.classList.remove("input-focused");
+            if (this.parentElement)
+                this.parentElement.classList.remove("input-focused");
         });
     });
 
-    cedulaInput.addEventListener("input", function () {
-        this.value = this.value.replace(/[^0-9]/g, "");
-        if (this.value.length > 8) {
-            this.value = this.value.substring(0, 8);
-        }
-    });
+    if (cedulaInput) {
+        cedulaInput.addEventListener("input", function () {
+            this.value = this.value.replace(/[^0-9]/g, "");
+            if (this.value.length > 8) {
+                this.value = this.value.substring(0, 8);
+            }
+        });
+    }
 }
 
 document.addEventListener("DOMContentLoaded", addLoginEffects);

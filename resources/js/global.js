@@ -1,96 +1,86 @@
-function showSuccessNotification(message, duration = 4000) {
-    const notification = document.getElementById("successNotification");
-    const messageElement = document.getElementById("successMessage");
+const showSuccessNotification = (m, d = 4e3) => {
+    let n = document.getElementById("successNotification");
+    let t = document.getElementById("successMessage");
 
-    if (notification && messageElement) {
-        messageElement.textContent = message;
-        notification.style.display = "block";
-
-        setTimeout(() => {
-            notification.style.display = "none";
-        }, duration);
+    if (n && t) {
+        t.textContent = m;
+        n.style.display = "block";
+        setTimeout(() => (n.style.display = "none"), d);
+        return;
     }
-}
 
+    n = document.createElement("div");
+    n.className = "success-notification show";
+    n.innerHTML = `<i class="fas fa-check-circle" style="margin-right:0.5rem"></i><span class="js-temp-success">${m}</span>`;
+    document.body.appendChild(n);
+    setTimeout(() => {
+        if (n.parentNode) n.remove();
+    }, d);
+};
 class TableRowSelector {
-    constructor(
-        tableSelector,
-        buttonSelector,
-        dataAttribute = "cooperativista"
-    ) {
-        this.table = document.querySelector(tableSelector);
-        this.button = document.getElementById(buttonSelector);
+    constructor(s, b, a = "cooperativista") {
+        this.tableSelector = s;
+        const t = document.querySelector(s);
+        this.table = t
+            ? t.tagName && t.tagName.toLowerCase() === "table"
+                ? t
+                : t.closest && t.closest("table")
+                ? t.closest("table")
+                : document.querySelector("table")
+            : document.querySelector("table");
+        this.button = document.getElementById(b) || null;
         this.selectedValue = null;
-        this.dataAttribute = dataAttribute;
-
-        if (this.table && this.button) {
-            this.init();
-        }
+        this.dataAttribute = a;
+        if (this.table) this.bindEvents();
     }
-
-    init() {
-        this.bindEvents();
-    }
-
     bindEvents() {
+        if (!this.table) return;
         this.table.addEventListener("click", (e) => {
-            const row = e.target.closest("tr, .recibo-row");
-
-            if (row && this.isSelectableRow(row)) {
-                this.selectRow(row);
-            }
+            const r = e.target.closest("tr");
+            if (
+                r &&
+                r.parentNode &&
+                r.parentNode.tagName.toLowerCase() === "tbody" &&
+                r.closest &&
+                r.closest("table") === this.table
+            )
+                this.selectRow(r);
         });
     }
-
-    isSelectableRow(row) {
-        if (row.tagName.toLowerCase() === "tr") {
-            return row.parentNode.tagName.toLowerCase() === "tbody";
-        }
-        return row.classList.contains("recibo-row");
-    }
-
-    selectRow(row) {
+    selectRow(r) {
         this.clearSelection();
-        row.classList.add("table-primary", "selected");
+        r.classList.add("selected", "table-primary");
         this.selectedValue =
-            row.dataset[this.dataAttribute] ||
-            row.getAttribute(`data-${this.dataAttribute}`);
-
-        if (this.selectedValue) {
-            this.button.disabled = false;
-        }
+            r.dataset[this.dataAttribute] ||
+            r.getAttribute(`data-${this.dataAttribute}`);
+        if (this.selectedValue && this.button) this.button.disabled = false;
     }
-
     clearSelection() {
-        const allRows = this.table.querySelectorAll("tr, .recibo-row");
-        allRows.forEach((row) => {
-            row.classList.remove("table-primary", "selected");
-        });
+        this.table
+            .querySelectorAll("tbody tr.table-row-selectable")
+            .forEach((r) => r.classList.remove("selected", "table-primary"));
+        this.selectedValue = null;
+        if (this.button) this.button.disabled = true;
     }
-
     getSelectedValue() {
         return this.selectedValue;
     }
 }
-
-function openRecibo(
-    selectedValue,
-    baseUrlMetaName = "recibos-detalle-url",
-    fallbackUrl = "/recibos/detalle"
-) {
-    if (!selectedValue) {
+const openRecibo = (
+    v,
+    meta = "recibos-detalle-url",
+    fb = "/recibos/detalle"
+) => {
+    if (!v) {
         alert("Por favor, seleccione un cooperativista primero");
         return;
     }
-
-    const baseUrl =
+    const base =
         document
-            .querySelector(`meta[name="${baseUrlMetaName}"]`)
-            ?.getAttribute("content") || fallbackUrl;
-
-    window.location.href = `${baseUrl}?documento=${selectedValue}`;
-}
-
+            .querySelector(`meta[name="${meta}"]`)
+            ?.getAttribute("content") || fb;
+    window.location.href = `${base}?documento=${v}`;
+};
 window.showSuccessNotification = showSuccessNotification;
 window.TableRowSelector = TableRowSelector;
 window.openRecibo = openRecibo;

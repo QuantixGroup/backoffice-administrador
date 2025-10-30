@@ -33,7 +33,7 @@
                             </thead>
                             <tbody>
                                 @forelse($sociosAprobados as $socio)
-                                    <tr class="recibo-row" data-cooperativista="{{ $socio->cedula ?? 'N/A' }}">
+                                    <tr class="table-row-selectable" data-cooperativista="{{ $socio->cedula ?? 'N/A' }}">
                                         <td>{{ $socio->nombre ?? 'N/A' }}</td>
                                         <td>{{ $socio->apellido ?? 'N/A' }}</td>
                                         <td>{{ $socio->cedula ?? 'N/A' }}</td>

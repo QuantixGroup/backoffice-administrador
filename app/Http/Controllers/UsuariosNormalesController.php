@@ -10,18 +10,17 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
-
+use Illuminate\Support\Facades\Schema;
 
 class UsuariosNormalesController extends Controller
 {
-
     public function mostrarPendientes()
     {
         $sociosPendientes = Socio::where('estado', 'pendiente')->get();
         return view('socios', compact('sociosPendientes'));
     }
 
-    public function aprobarPorCedula(string $cedula, Request $request = null)
+    public function aprobarPorCedula(string $cedula, ?Request $request = null)
     {
         $socioEncontrado = Socio::where('cedula', $cedula)
             ->where('estado', 'pendiente')
@@ -39,7 +38,10 @@ class UsuariosNormalesController extends Controller
 
         if ($usuarioExistente === null) {
             $nuevoUsuario = new UsuariosNormales();
-            $nuevoUsuario->name = $socioEncontrado->nombre . ' ' . $socioEncontrado->apellido;
+            $partesNombre = preg_split('/\s+/', trim($socioEncontrado->nombre));
+
+            $nuevoUsuario->nombre = $partesNombre[0];
+            $nuevoUsuario->apellido = trim($socioEncontrado->apellido);
             $nuevoUsuario->cedula = $socioEncontrado->cedula;
             $nuevoUsuario->email = $socioEncontrado->email;
             $nuevoUsuario->password = Hash::make($socioEncontrado->contraseña ?: $socioEncontrado->cedula);
@@ -73,7 +75,6 @@ class UsuariosNormalesController extends Controller
                 ]);
             }
         } catch (\Throwable $e) {
-            Log::error('Error creando oauth client para socio ' . $socioEncontrado->cedula . ': ' . $e->getMessage());
         }
 
         $socioEncontrado->estado = 'aprobado';
@@ -111,5 +112,30 @@ class UsuariosNormalesController extends Controller
         $socioEncontrado->save();
 
         return redirect()->route('home')->with('ok', 'Usuario rechazado con éxito');
+    }
+
+    public function eliminarPorCedula(string $cedula, ?Request $request = null)
+    {
+        try {
+            $result = Socio::eliminarPorCedula($cedula);
+        } catch (\Throwable $e) {
+            if ($request && $request->expectsJson()) {
+                return response()->json(['error' => 'Error al eliminar usuario'], 500);
+            }
+            return back()->with('error', 'Error al eliminar usuario');
+        }
+
+        if (!$result) {
+            if ($request && $request->expectsJson()) {
+                return response()->json(['error' => 'Solo se pueden eliminar socios aprobados'], 400);
+            }
+            return back()->with('error', 'Solo se pueden eliminar socios aprobados');
+        }
+
+        if ($request && $request->expectsJson()) {
+            return response()->json(['success' => true]);
+        }
+
+        return redirect()->route('socios.aprobados')->with('ok', 'Usuario eliminado correctamente');
     }
 }

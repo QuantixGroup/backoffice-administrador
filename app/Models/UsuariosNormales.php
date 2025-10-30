@@ -13,7 +13,8 @@ class UsuariosNormales extends Model
     protected $table = 'users';
 
     protected $fillable = [
-        'name',
+        'nombre',
+        'apellido',
         'cedula',
         'email',
         'password',

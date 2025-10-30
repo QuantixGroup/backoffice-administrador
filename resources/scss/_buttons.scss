@@ -73,7 +73,10 @@ body.dark .btn-login {
 }
 
 .btn-abrir,
-.btn-ver-recibo {
+.btn-ver-recibo,
+.btn-guardar,
+.btn-delete,
+.btn-cambiar-password {
     @include btn-base;
     padding: 0.75rem 2rem;
     font-weight: 500;
@@ -86,12 +89,18 @@ body.dark .btn-login {
 }
 
 .btn-abrir:hover:not(:disabled),
-.btn-ver-recibo:hover:not(:disabled) {
+.btn-ver-recibo:hover:not(:disabled),
+.btn-guardar:hover:not(:disabled),
+.btn-delete:hover:not(:disabled),
+.btn-cambiar-password:hover:not(:disabled) {
     @include btn-hover-effect;
 }
 
 .btn-abrir:disabled,
-.btn-ver-recibo:disabled {
+.btn-ver-recibo:disabled,
+.btn-guardar:disabled,
+.btn-delete:disabled,
+.btn-cambiar-password:disabled {
     background-color: $bg-color-default;
     color: $text-color-secondary;
     opacity: 0.6;
@@ -319,7 +328,9 @@ body.dark .btn-login {
     .btn-reject,
     .btn-approve,
     .btn-abrir,
-    .btn-ver-recibo {
+    .btn-guardar,
+    .btn-ver-recibo,
+    .btn-delete {
         display: block;
         width: 100%;
         margin-bottom: 1rem;
@@ -331,7 +342,9 @@ body.dark .btn-login {
     .btn-reject,
     .btn-approve,
     .btn-abrir,
-    .btn-ver-recibo {
+    .btn-guardar,
+    .btn-ver-recibo,
+    .btn-delete {
         display: block;
         width: 100%;
         margin-bottom: 1rem;

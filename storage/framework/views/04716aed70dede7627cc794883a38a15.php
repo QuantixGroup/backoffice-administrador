@@ -33,7 +33,7 @@
                             </thead>
                             <tbody>
                                 <?php $__empty_1 = true; $__currentLoopData = $sociosAprobados; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $socio): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                                    <tr class="recibo-row" data-cooperativista="<?php echo e($socio->cedula ?? 'N/A'); ?>">
+                                    <tr class="table-row-selectable" data-cooperativista="<?php echo e($socio->cedula ?? 'N/A'); ?>">
                                         <td><?php echo e($socio->nombre ?? 'N/A'); ?></td>
                                         <td><?php echo e($socio->apellido ?? 'N/A'); ?></td>
                                         <td><?php echo e($socio->cedula ?? 'N/A'); ?></td>

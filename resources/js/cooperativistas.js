@@ -1,4 +1,4 @@
-class CooperativistasManager {
+class AprobacionSocios {
     constructor() {
         this.cooperativistaSeleccionado = null;
         this.init();
@@ -44,7 +44,6 @@ class CooperativistasManager {
         const form = button.closest("form");
 
         if (!cedula || !form) {
-            console.error("No se encontró la cédula");
             return;
         }
 
@@ -86,7 +85,6 @@ class CooperativistasManager {
                 throw new Error(data.message || "Error al aprobar usuario");
             }
         } catch (error) {
-            console.error("Error:", error);
             this.mostrarNotificacion(
                 error.message || "Error al procesar la solicitud",
                 "error"
@@ -269,7 +267,7 @@ class CooperativistasManager {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-    new CooperativistasManager();
+    new AprobacionSocios();
 });
 
-window.CooperativistasManager = CooperativistasManager;
+window.AprobacionSocios = AprobacionSocios;

@@ -2,34 +2,29 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class ApiCooperativistaService
 {
-    private static $apiUrl;
-    private static $apiToken;
-
-    public function __construct()
-    {
-        self::$apiUrl = config('services.api_cooperativista.url');
-        self::$apiToken = config('services.api_cooperativista.token');
-    }
-
     public static function getDatosCooperativista($cedula)
     {
         try {
-            Log::info("Consultando datos cooperativista para cédula: {$cedula} - API no implementada");
+            $ultimoPago = DB::table('pagos_mensuales')
+                ->where('cedula', $cedula)
+                ->orderBy('fecha_comprobante', 'desc')
+                ->first();
+
+            $ultimoEstado = $ultimoPago ? $ultimoPago->estado : 'pendiente';
+            $horasTrabajadas = ApiHorasService::getHorasTrabajadas($cedula);
 
             return [
-                'estado_pago' => 'pendiente',
-                'horas_trabajadas' => 0
+                'ultimo_estado_pago' => $ultimoEstado,
+                'horas_trabajadas' => $horasTrabajadas
             ];
 
         } catch (\Exception $e) {
-            Log::error("Error al consultar datos cooperativista: " . $e->getMessage());
             return [
-                'estado_pago' => 'pendiente',
+                'ultimo_estado_pago' => 'pendiente',
                 'horas_trabajadas' => 0
             ];
         }
@@ -38,11 +33,9 @@ class ApiCooperativistaService
     public static function getHistorialCompleto($cedula)
     {
         try {
-            Log::info("Consultando historial completo para cédula: {$cedula} - API no implementada");
-            return [];
+            return ApiHorasService::getHistorialHoras($cedula);
 
         } catch (\Exception $e) {
-            Log::error("Error al consultar historial completo: " . $e->getMessage());
             return [];
         }
     }

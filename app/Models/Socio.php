@@ -4,8 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Hash;
 use App\Services\ApiCooperativistaService;
+use Illuminate\Support\Facades\DB;
+use App\Models\UsuariosNormales;
 
 
 class Socio extends Model
@@ -30,7 +31,8 @@ class Socio extends Model
         'estado',
         'integrantes_familiares',
         'fecha_ingreso',
-        'fecha_egreso'
+        'fecha_egreso',
+        'deleted_at',
     ];
 
     private $datosApi = null;
@@ -46,7 +48,7 @@ class Socio extends Model
     public function getEstadoPagoAttribute()
     {
         $datos = $this->getDatosApi();
-        return $datos['estado_pago'] ?? 'pendiente';
+        return $datos['ultimo_estado_pago'] ?? 'pendiente';
     }
 
     public function getEstadoPagoBadgeAttribute()
@@ -54,13 +56,13 @@ class Socio extends Model
         $estado = $this->estado_pago;
 
         switch ($estado) {
-            case 'pagado':
-                return '<span class="badge bg-success">Pagado</span>';
-            case 'vencido':
-                return '<span class="badge bg-danger">Vencido</span>';
+            case 'aceptado':
+                return '<span class="badge bg-success">Aceptado</span>';
+            case 'rechazado':
+                return '<span class="badge bg-danger">Rechazado</span>';
             case 'pendiente':
             default:
-                return '<span class="badge bg-secondary">Pendiente</span>';
+                return '<span class="badge bg-warning text-dark">Pendiente</span>';
         }
     }
 
@@ -81,5 +83,37 @@ class Socio extends Model
         return $this->attributes['ingreso_mensual'] ?? null;
     }
 
+    public static function eliminarPorCedula(string $cedula): bool
+    {
+        $socio = self::where('cedula', $cedula)->firstOrFail();
+        if (($socio->estado ?? null) !== 'aprobado') {
+            return false;
+        }
+
+        return DB::transaction(function () use ($socio, $cedula) {
+            $socio->delete();
+
+            $user = UsuariosNormales::where('cedula', $cedula)->first();
+            if (!$user) {
+                return true;
+            }
+
+            $userId = $user->id;
+            $user->delete();
+
+            DB::table('oauth_access_tokens')->where('user_id', $userId)->update(['revoked' => 1]);
+
+            DB::table('oauth_refresh_tokens')
+                ->whereIn('access_token_id', function ($q) use ($userId) {
+                    $q->select('id')->from('oauth_access_tokens')->where('user_id', $userId);
+                })->delete();
+
+            DB::table('personal_access_tokens')->where('tokenable_id', $userId)->delete();
+            DB::table('sessions')->where('user_id', $userId)->delete();
+
+            return true;
+        });
+    }
 
 }
+

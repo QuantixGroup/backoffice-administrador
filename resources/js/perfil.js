@@ -8,8 +8,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function initializeDropzone() {
         if (dropzoneElement && !profileImageDropzone) {
-            console.log("Initializing Dropzone...");
-
             profileImageDropzone = new Dropzone("#profile-image-dropzone", {
                 url: "/perfil/upload-image",
                 paramName: "profile_image",
@@ -70,7 +68,6 @@ document.addEventListener("DOMContentLoaded", function () {
                                 dzInstance.removeAllFiles();
                             }, 2000);
                         } else {
-                            console.error("Upload failed:", response);
                             showNotification(
                                 response.message || "Error al subir la imagen",
                                 "danger"
@@ -79,7 +76,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     });
 
                     this.on("error", function (file, errorMessage) {
-                        console.error("Error uploading file:", errorMessage);
                         let message = errorMessage;
                         if (typeof errorMessage === "object") {
                             message =
@@ -192,21 +188,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (saveButton) {
         saveButton.addEventListener("click", function () {
+            const nombreEl = document.getElementById("nombre");
+            const apellidoEl = document.getElementById("apellido");
+            const emailEl = document.getElementById("email");
+            const telefonoEl = document.getElementById("telefono");
+            const fechaEl = document.getElementById("fecha_nacimiento");
+
             const formData = new FormData();
-            formData.append("nombre", document.getElementById("nombre").value);
-            formData.append(
-                "apellido",
-                document.getElementById("apellido").value
-            );
-            formData.append("email", document.getElementById("email").value);
-            formData.append(
-                "telefono",
-                document.getElementById("telefono").value
-            );
-            formData.append(
-                "fecha_nacimiento",
-                document.getElementById("fecha_nacimiento").value
-            );
+            formData.append("nombre", nombreEl ? nombreEl.value : "");
+            formData.append("apellido", apellidoEl ? apellidoEl.value : "");
+            formData.append("email", emailEl ? emailEl.value : "");
+            formData.append("telefono", telefonoEl ? telefonoEl.value : "");
+            formData.append("fecha_nacimiento", fechaEl ? fechaEl.value : "");
 
             fetch("/perfil/update", {
                 method: "POST",
@@ -240,7 +233,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
                 })
                 .catch((error) => {
-                    console.error("Error:", error);
                     showNotification(
                         `Error! No se pudo actualizar el perfil. ${error.message}`,
                         "danger"
@@ -248,6 +240,37 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
         });
     }
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    const toggles = document.querySelectorAll(".toggle-password");
+
+    toggles.forEach((btn) => {
+        btn.addEventListener("click", function (e) {
+            const targetSelector = btn.getAttribute("data-target");
+            if (!targetSelector) return;
+            const input = document.querySelector(targetSelector);
+            if (!input) return;
+
+            if (input.type === "password") {
+                input.type = "text";
+                const icon = btn.querySelector("i");
+                if (icon) {
+                    icon.classList.remove("fa-eye");
+                    icon.classList.add("fa-eye-slash");
+                }
+                btn.setAttribute("aria-label", "Ocultar contraseña");
+            } else {
+                input.type = "password";
+                const icon = btn.querySelector("i");
+                if (icon) {
+                    icon.classList.remove("fa-eye-slash");
+                    icon.classList.add("fa-eye");
+                }
+                btn.setAttribute("aria-label", "Mostrar contraseña");
+            }
+        });
+    });
 });
 
 function showNotification(message, type) {
@@ -283,3 +306,64 @@ function showNotification(message, type) {
         }
     }, 4000);
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+    const changePasswordForm = document.getElementById("change-password-form");
+
+    if (changePasswordForm) {
+        changePasswordForm.addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            const currentPassword = document.getElementById("current_password");
+            const newPassword = document.getElementById("new_password");
+            const confirmNewPassword = document.getElementById(
+                "confirm_new_password"
+            );
+
+            if (!currentPassword || !newPassword || !confirmNewPassword) {
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("current_password", currentPassword.value);
+            formData.append("new_password", newPassword.value);
+            formData.append("confirm_new_password", confirmNewPassword.value);
+
+            try {
+                const response = await fetch("/perfil/cambiar-password", {
+                    method: "POST",
+                    headers: {
+                        "X-CSRF-TOKEN": document
+                            .querySelector('meta[name="csrf-token"]')
+                            .getAttribute("content"),
+                        Accept: "application/json",
+                    },
+                    body: formData,
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showNotification(
+                        "Contraseña actualizada correctamente",
+                        "success"
+                    );
+                    changePasswordForm.reset();
+                    setTimeout(() => {
+                        window.location.href = "/";
+                    }, 1200);
+                } else {
+                    showNotification(
+                        data.message || "Error al cambiar la contraseña",
+                        "danger"
+                    );
+                }
+            } catch (error) {
+                showNotification(
+                    "Error de conexión al cambiar la contraseña",
+                    "danger"
+                );
+            }
+        });
+    }
+});

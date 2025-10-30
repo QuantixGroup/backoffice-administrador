@@ -151,7 +151,6 @@
         </div>
     </div>
 
-
     <div class="modal-overlay" id="rejectModal">
         <div class="modal-content">
             <div class="modal-title">¿Está seguro que desea rechazar la solicitud?</div>

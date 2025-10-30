@@ -79,6 +79,15 @@
                                 </tbody>
                             </table>
                         </div>
+                        <div class="action-buttons">
+                            <div class="row">
+                                <div class="col-12 text-end">
+                                    <button id="accionBtn" class="btn-delete" disabled>
+                                        Eliminar Usuario
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -86,6 +95,23 @@
     </div>
 
     @include('partials.footer')
+
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal-content">
+            <div class="modal-title">¿Está seguro que desea eliminar la cuenta de este usuario?</div>
+            <div class="modal-buttons">
+                <button class="btn-modal-cancel" onclick="hideDeleteModal()">Cancelar</button>
+                <button class="btn-modal-confirm btn-delete-confirm" id="confirmDeleteBtn"
+                    onclick="deleteUser()">Eliminar</button>
+            </div>
+        </div>
+    </div>
+
+    <form id="deleteForm" method="POST" action="" style="display: none;">
+        @csrf
+    </form>
+
+
 </body>
 
 </html>
