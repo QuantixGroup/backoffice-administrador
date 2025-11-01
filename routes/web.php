@@ -1,13 +1,12 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\UserController;
-use App\Http\Middleware\CambioPassword;
-use App\Http\Controllers\UsuariosNormalesController;
 use App\Http\Controllers\RecibosController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\UsuariosNormalesController;
+use App\Http\Middleware\CambioPassword;
 use App\Models\Socio;
 use App\Services\ApiCooperativistaService;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/login', function () {
     return view('login');
@@ -24,7 +23,7 @@ Route::middleware(['auth', CambioPassword::class])->group(function () {
             try {
                 $datos = ApiCooperativistaService::getDatosCooperativista($socio->cedula);
 
-                if (is_array($datos) && !empty($datos)) {
+                if (is_array($datos) && ! empty($datos)) {
                     $changed = false;
 
                     if (isset($datos['nombre']) && $datos['nombre'] !== $socio->nombre) {
@@ -80,6 +79,7 @@ Route::middleware(['auth', CambioPassword::class])->group(function () {
     Route::post('/perfil/cambiar-password', [UserController::class, 'cambiarPassword'])->name('perfil.cambiar-password');
     Route::get('/socios/aprobados', function () {
         $sociosAprobados = Socio::where('estado', 'aprobado')->get();
+
         return view('listado-cooperativistas', compact('sociosAprobados'));
     })->name('socios.aprobados');
     Route::get('/socios/{cedula}/detalle', [UsuariosNormalesController::class, 'mostrarDetalle'])->name('socios.detalle');

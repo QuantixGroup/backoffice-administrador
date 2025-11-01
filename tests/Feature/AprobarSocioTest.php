@@ -2,32 +2,34 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use App\Models\User;
 use App\Models\Socio;
+use App\Models\User;
 use App\Models\UsuariosNormales;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
+use Tests\TestCase;
 
 class AprobarSocioTest extends TestCase
 {
     protected $skipTestsDueToMissingTables = false;
+
     protected function setUp(): void
     {
         parent::setUp();
         $this->withoutMiddleware();
         $this->skipTestsDueToMissingTables = false;
         $missing = [];
-        if (!Schema::hasTable((new User())->getTable())) {
-            $missing[] = (new User())->getTable();
+        if (! Schema::hasTable((new User)->getTable())) {
+            $missing[] = (new User)->getTable();
         }
-        if (!Schema::hasTable((new Socio())->getTable())) {
-            $missing[] = (new Socio())->getTable();
+        if (! Schema::hasTable((new Socio)->getTable())) {
+            $missing[] = (new Socio)->getTable();
         }
-        if (!empty($missing)) {
+        if (! empty($missing)) {
             $this->skipTestsDueToMissingTables = true;
         }
     }
+
     private function admin(): User
     {
         return User::updateOrCreate([
@@ -63,11 +65,11 @@ class AprobarSocioTest extends TestCase
         ]);
     }
 
-
     public function test_aprobar_socio_inexistente_redirige_con_error(): void
     {
-        if (!empty($this->skipTestsDueToMissingTables)) {
+        if (! empty($this->skipTestsDueToMissingTables)) {
             $this->addToAssertionCount(1);
+
             return;
         }
         $admin = $this->admin();
@@ -77,10 +79,12 @@ class AprobarSocioTest extends TestCase
         $resp->assertStatus(302);
         $resp->assertSessionHas('error');
     }
+
     public function test_aprobar_socio_pendiente_exitoso(): void
     {
-        if (!empty($this->skipTestsDueToMissingTables)) {
+        if (! empty($this->skipTestsDueToMissingTables)) {
             $this->addToAssertionCount(1);
+
             return;
         }
         $admin = $this->admin();
@@ -96,7 +100,7 @@ class AprobarSocioTest extends TestCase
             'estado' => 'aprobado',
         ]);
 
-        $this->assertDatabaseHas((new UsuariosNormales())->getTable(), [
+        $this->assertDatabaseHas((new UsuariosNormales)->getTable(), [
             'cedula' => $socio->cedula,
             'email' => $socio->email,
         ]);

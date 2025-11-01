@@ -19,13 +19,13 @@ class ApiCooperativistaService
 
             return [
                 'ultimo_estado_pago' => $ultimoEstado,
-                'horas_trabajadas' => $horasTrabajadas
+                'horas_trabajadas' => $horasTrabajadas,
             ];
 
         } catch (\Exception $e) {
             return [
                 'ultimo_estado_pago' => 'pendiente',
-                'horas_trabajadas' => 0
+                'horas_trabajadas' => 0,
             ];
         }
     }

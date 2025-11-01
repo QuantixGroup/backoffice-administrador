@@ -3,7 +3,7 @@
 use App\Models\Socio;
 
 test('model Socio con tabla y atributos fillable esperados', function () {
-    $model = new Socio();
+    $model = new Socio;
 
     expect($model->getTable())->toBe('socios');
 

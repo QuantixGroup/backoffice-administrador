@@ -2,20 +2,21 @@
 
 namespace Tests\Unit;
 
-use Tests\TestCase;
 use App\Http\Controllers\RecibosController;
-use Illuminate\Http\Request;
 use App\Models\Socio;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
+use Tests\TestCase;
 
 class RecibosControllerTest extends TestCase
 {
     protected $skipTestsDueToMissingTables = false;
-    public function setUp(): void
+
+    protected function setUp(): void
     {
         parent::setUp();
         $this->withoutMiddleware();
-        if (!Schema::hasTable((new Socio())->getTable())) {
+        if (! Schema::hasTable((new Socio)->getTable())) {
             $this->skipTestsDueToMissingTables = true;
         }
     }
@@ -24,9 +25,10 @@ class RecibosControllerTest extends TestCase
     {
         if ($this->skipTestsDueToMissingTables) {
             $this->addToAssertionCount(1);
+
             return;
         }
-        $controller = new RecibosController();
+        $controller = new RecibosController;
 
         $ref = new \ReflectionClass(RecibosController::class);
         $method = $ref->getMethod('obtenerNombreMes');
@@ -41,9 +43,10 @@ class RecibosControllerTest extends TestCase
     {
         if ($this->skipTestsDueToMissingTables) {
             $this->addToAssertionCount(1);
+
             return;
         }
-        $controller = new RecibosController();
+        $controller = new RecibosController;
         $request = Request::create('/recibos/detalle', 'GET', []);
 
         $response = $controller->detalle($request);

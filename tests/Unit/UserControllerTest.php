@@ -2,21 +2,22 @@
 
 namespace Tests\Unit;
 
-use Tests\TestCase;
 use App\Http\Controllers\UserController;
-use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
+use Tests\TestCase;
 
 class UserControllerTest extends TestCase
 {
     protected $skipTestsDueToMissingTables = false;
+
     protected function setUp(): void
     {
         parent::setUp();
         $this->withoutMiddleware();
-        if (!Schema::hasTable((new User())->getTable())) {
+        if (! Schema::hasTable((new User)->getTable())) {
             $this->skipTestsDueToMissingTables = true;
         }
     }
@@ -25,6 +26,7 @@ class UserControllerTest extends TestCase
     {
         if ($this->skipTestsDueToMissingTables) {
             $this->addToAssertionCount(1);
+
             return;
         }
         $user = User::updateOrCreate([
@@ -39,12 +41,12 @@ class UserControllerTest extends TestCase
 
         $this->actingAs($user);
 
-        $controller = new UserController();
+        $controller = new UserController;
         $request = Request::create('/perfil/update', 'POST', [
             'nombre' => '',
         ]);
 
-        $request->setUserResolver(fn() => $user);
+        $request->setUserResolver(fn () => $user);
         $response = $controller->updateProfile($request);
 
         $this->assertEquals(422, $response->getStatusCode());
@@ -57,6 +59,7 @@ class UserControllerTest extends TestCase
     {
         if ($this->skipTestsDueToMissingTables) {
             $this->addToAssertionCount(1);
+
             return;
         }
         $plain = 'current_pass_1';
@@ -73,14 +76,14 @@ class UserControllerTest extends TestCase
 
         $this->actingAs($user);
 
-        $controller = new UserController();
+        $controller = new UserController;
         $request = Request::create('/perfil/change-password', 'POST', [
             'current_password' => $plain,
             'new_password' => 'newStrongPassword',
             'confirm_new_password' => 'newStrongPassword',
         ]);
 
-        $request->setUserResolver(fn() => $user);
+        $request->setUserResolver(fn () => $user);
 
         $response = $controller->changePassword($request);
         $this->assertEquals(200, $response->getStatusCode());

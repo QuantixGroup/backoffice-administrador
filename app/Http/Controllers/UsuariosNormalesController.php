@@ -3,20 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Socio;
-use Illuminate\Database\Eloquent\Model;
 use App\Models\UsuariosNormales;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Schema;
 
 class UsuariosNormalesController extends Controller
 {
     public function mostrarPendientes()
     {
         $sociosPendientes = Socio::where('estado', 'pendiente')->get();
+
         return view('socios', compact('sociosPendientes'));
     }
 
@@ -30,6 +28,7 @@ class UsuariosNormalesController extends Controller
             if ($request && $request->expectsJson()) {
                 return response()->json(['error' => 'Socio no encontrado o ya aprobado'], 404);
             }
+
             return back()->with('error', 'Socio no encontrado o ya aprobado');
         }
 
@@ -37,7 +36,7 @@ class UsuariosNormalesController extends Controller
         $appUserId = null;
 
         if ($usuarioExistente === null) {
-            $nuevoUsuario = new UsuariosNormales();
+            $nuevoUsuario = new UsuariosNormales;
             $partesNombre = preg_split('/\s+/', trim($socioEncontrado->nombre));
 
             $nuevoUsuario->nombre = $partesNombre[0];
@@ -58,12 +57,12 @@ class UsuariosNormalesController extends Controller
                 ->where('revoked', 0)
                 ->first();
 
-            if (!$existingClient) {
+            if (! $existingClient) {
                 $secret = Str::random(40);
                 $now = now();
                 $clientId = DB::table('oauth_clients')->insertGetId([
                     'user_id' => $appUserId,
-                    'name' => 'Socio ' . $socioEncontrado->cedula,
+                    'name' => 'Socio '.$socioEncontrado->cedula,
                     'secret' => $secret,
                     'provider' => 'users',
                     'redirect' => 'http://localhost',
@@ -122,13 +121,15 @@ class UsuariosNormalesController extends Controller
             if ($request && $request->expectsJson()) {
                 return response()->json(['error' => 'Error al eliminar usuario'], 500);
             }
+
             return back()->with('error', 'Error al eliminar usuario');
         }
 
-        if (!$result) {
+        if (! $result) {
             if ($request && $request->expectsJson()) {
                 return response()->json(['error' => 'Solo se pueden eliminar socios aprobados'], 400);
             }
+
             return back()->with('error', 'Solo se pueden eliminar socios aprobados');
         }
 

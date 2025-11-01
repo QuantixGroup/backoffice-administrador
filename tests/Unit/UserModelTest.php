@@ -3,7 +3,7 @@
 use App\Models\User;
 
 test('model User con tabla y atributos fillable esperados', function () {
-    $model = new User();
+    $model = new User;
 
     expect($model->getTable())->toBe('admins');
 

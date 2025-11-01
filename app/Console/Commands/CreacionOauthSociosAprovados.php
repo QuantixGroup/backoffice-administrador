@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Models\Socio;
+use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -36,8 +36,9 @@ class CreacionOauthSociosAprovados extends Command
             $cedula = $socio->cedula;
             try {
                 $usuario = \App\Models\UsuariosNormales::where('cedula', $cedula)->first();
-                if (!$usuario) {
+                if (! $usuario) {
                     $this->line("Omitiendo {$cedula}: no existe registro de usuario");
+
                     continue;
                 }
 
@@ -53,6 +54,7 @@ class CreacionOauthSociosAprovados extends Command
                         $this->line("Cliente existente revocado para {$cedula}");
                     } else {
                         $this->line("El cliente ya existe para {$cedula}, omitiendo");
+
                         continue;
                     }
                 }
@@ -61,7 +63,7 @@ class CreacionOauthSociosAprovados extends Command
                 $now = now();
                 $clientId = DB::table('oauth_clients')->insertGetId([
                     'user_id' => $usuario->id,
-                    'name' => 'Socio ' . $cedula,
+                    'name' => 'Socio '.$cedula,
                     'secret' => $secret,
                     'provider' => 'users',
                     'redirect' => 'http://localhost',
@@ -74,7 +76,7 @@ class CreacionOauthSociosAprovados extends Command
 
                 $this->info("Cliente OAuth creado para {$cedula} (ID cliente: {$clientId})");
             } catch (\Throwable $e) {
-                $this->error("Error al procesar {$cedula}: " . $e->getMessage());
+                $this->error("Error al procesar {$cedula}: ".$e->getMessage());
             }
         }
 

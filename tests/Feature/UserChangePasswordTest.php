@@ -2,25 +2,26 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
+use Tests\TestCase;
 
 class UserChangePasswordTest extends TestCase
 {
     /** @var \App\Models\User */
     protected $user;
+
     protected $skipTestsDueToMissingTables = false;
 
     protected function setUp(): void
     {
         parent::setUp();
-        if (!Schema::hasTable((new User())->getTable())) {
+        if (! Schema::hasTable((new User)->getTable())) {
             $this->skipTestsDueToMissingTables = true;
         }
 
-        if (!$this->skipTestsDueToMissingTables) {
+        if (! $this->skipTestsDueToMissingTables) {
             $this->user = User::updateOrCreate([
                 'cedula' => '77770000',
             ], [
@@ -38,6 +39,7 @@ class UserChangePasswordTest extends TestCase
     {
         if ($this->skipTestsDueToMissingTables) {
             $this->addToAssertionCount(1);
+
             return;
         }
         $this->actingAs($this->user);
@@ -58,6 +60,7 @@ class UserChangePasswordTest extends TestCase
     {
         if ($this->skipTestsDueToMissingTables) {
             $this->addToAssertionCount(1);
+
             return;
         }
         $this->actingAs($this->user);

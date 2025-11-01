@@ -2,23 +2,25 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
+use Tests\TestCase;
 
 class LoginPorCedulaTest extends TestCase
 {
     protected $skipTestsDueToMissingTables = false;
+
     protected function setUp(): void
     {
         parent::setUp();
         $this->withoutMiddleware();
         $this->skipTestsDueToMissingTables = false;
-        if (!Schema::hasTable((new User())->getTable())) {
+        if (! Schema::hasTable((new User)->getTable())) {
             $this->skipTestsDueToMissingTables = true;
         }
     }
+
     private function crearAdmin(): User
     {
         return User::updateOrCreate([
@@ -35,8 +37,9 @@ class LoginPorCedulaTest extends TestCase
 
     public function test_login_ok_redirige_a_home_y_autentica(): void
     {
-        if (!empty($this->skipTestsDueToMissingTables)) {
+        if (! empty($this->skipTestsDueToMissingTables)) {
             $this->addToAssertionCount(1);
+
             return;
         }
         $admin = $this->crearAdmin();
@@ -50,7 +53,4 @@ class LoginPorCedulaTest extends TestCase
         $response->assertRedirectToRoute('home');
         $this->assertAuthenticatedAs($admin);
     }
-
-
-
 }

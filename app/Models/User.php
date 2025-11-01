@@ -26,6 +26,7 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     protected $table = 'admins';
+
     protected $fillable = [
         'name',
         'cedula',
@@ -60,7 +61,7 @@ class User extends Authenticatable
         return Str::of($this->name)
             ->explode(' ')
             ->take(2)
-            ->map(fn($word) => Str::substr($word, 0, 1))
+            ->map(fn ($word) => Str::substr($word, 0, 1))
             ->implode('');
     }
 }
