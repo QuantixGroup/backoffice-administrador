@@ -23,7 +23,7 @@ class ApiRecibosService
                         'estado' => $recibo->estado,
                         'mes' => $recibo->mes,
                         'anio' => $recibo->anio,
-                        'observacion' => $recibo->observacion ?? ''
+                        'observacion' => $recibo->observacion ?? '',
                     ];
                 })
                 ->toArray();
@@ -63,7 +63,7 @@ class ApiRecibosService
                 'total' => $total,
                 'pendientes' => $pendientes,
                 'pagados' => $pagados,
-                'monto_total' => $montoTotal
+                'monto_total' => $montoTotal,
             ];
 
         } catch (\Exception $e) {
@@ -71,7 +71,7 @@ class ApiRecibosService
                 'total' => 0,
                 'pendientes' => 0,
                 'pagados' => 0,
-                'monto_total' => 0
+                'monto_total' => 0,
             ];
         }
     }
@@ -103,19 +103,19 @@ class ApiRecibosService
                 ->where('id_pago', $idPago)
                 ->first();
 
-            if (!$pago || !$pago->archivo_comprobante) {
+            if (! $pago || ! $pago->archivo_comprobante) {
                 return null;
             }
 
             $rutaRelativa = $pago->archivo_comprobante;
 
             $ubicacionesPosibles = [
-                storage_path('app/public/' . $rutaRelativa),
-                base_path('../api-usuarios/storage/app/public/' . $rutaRelativa),
-                base_path('../api-cooperativa/storage/app/public/' . $rutaRelativa),
+                storage_path('app/public/'.$rutaRelativa),
+                base_path('../api-usuarios/storage/app/public/'.$rutaRelativa),
+                base_path('../api-cooperativa/storage/app/public/'.$rutaRelativa),
                 $rutaRelativa,
                 public_path($rutaRelativa),
-                public_path('storage/' . $rutaRelativa),
+                public_path('storage/'.$rutaRelativa),
             ];
 
             $rutaArchivo = null;
@@ -127,7 +127,7 @@ class ApiRecibosService
                 }
             }
 
-            if (!$rutaArchivo) {
+            if (! $rutaArchivo) {
                 return null;
             }
 

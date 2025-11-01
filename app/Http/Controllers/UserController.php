@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -31,6 +31,7 @@ class UserController extends Controller
     public function logout()
     {
         Auth::logout();
+
         return redirect('/login');
     }
 
@@ -48,7 +49,7 @@ class UserController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Datos de validación incorrectos',
-                'errors' => $validator->errors()
+                'errors' => $validator->errors(),
             ], 422);
         }
 
@@ -67,19 +68,19 @@ class UserController extends Controller
             } else {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Usuario no encontrado o no autenticado'
+                    'message' => 'Usuario no encontrado o no autenticado',
                 ], 404);
             }
 
             return response()->json([
                 'success' => true,
-                'message' => 'Perfil actualizado correctamente'
+                'message' => 'Perfil actualizado correctamente',
             ]);
 
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Error al actualizar el perfil: ' . $e->getMessage()
+                'message' => 'Error al actualizar el perfil: '.$e->getMessage(),
             ], 500);
         }
     }
@@ -93,7 +94,7 @@ class UserController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'success' => false,
-                'message' => 'El archivo debe ser una imagen válida (JPG, PNG, GIF) de máximo 2MB'
+                'message' => 'El archivo debe ser una imagen válida (JPG, PNG, GIF) de máximo 2MB',
             ], 422);
         }
 
@@ -115,19 +116,19 @@ class UserController extends Controller
                 return response()->json([
                     'success' => true,
                     'message' => 'Imagen de perfil actualizada correctamente',
-                    'image_url' => asset('storage/' . $imagePath)
+                    'image_url' => asset('storage/'.$imagePath),
                 ]);
             }
 
             return response()->json([
                 'success' => false,
-                'message' => 'No se recibió ninguna imagen'
+                'message' => 'No se recibió ninguna imagen',
             ], 400);
 
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Error al subir la imagen: ' . $e->getMessage()
+                'message' => 'Error al subir la imagen: '.$e->getMessage(),
             ], 500);
         }
     }
@@ -135,22 +136,22 @@ class UserController extends Controller
     public function showProfile()
     {
         $user = Auth::user();
-        $profileImageUrl = $user->profile_image ? asset('storage/' . $user->profile_image) : asset('img/admin-profile.jpg');
+        $profileImageUrl = $user->profile_image ? asset('storage/'.$user->profile_image) : asset('img/admin-profile.jpg');
 
         return view('perfil', [
             'user' => $user,
-            'profileImageUrl' => $profileImageUrl
+            'profileImageUrl' => $profileImageUrl,
         ]);
     }
 
     public function mostrarCambiarPassword()
     {
         $user = Auth::user();
-        $profileImageUrl = $user->profile_image ? asset('storage/' . $user->profile_image) : asset('img/admin-profile.jpg');
+        $profileImageUrl = $user->profile_image ? asset('storage/'.$user->profile_image) : asset('img/admin-profile.jpg');
 
         return view('cambiar_password', [
             'user' => $user,
-            'profileImageUrl' => $profileImageUrl
+            'profileImageUrl' => $profileImageUrl,
         ]);
     }
 
@@ -172,17 +173,17 @@ class UserController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Error de validación',
-                'errors' => $validator->errors()
+                'errors' => $validator->errors(),
             ], 422);
         }
 
         try {
             $user = Auth::user();
 
-            if (!Hash::check($request->current_password, $user->password)) {
+            if (! Hash::check($request->current_password, $user->password)) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'La contraseña actual es incorrecta'
+                    'message' => 'La contraseña actual es incorrecta',
                 ], 401);
             }
 
@@ -198,13 +199,13 @@ class UserController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Contraseña actualizada correctamente'
+                'message' => 'Contraseña actualizada correctamente',
             ]);
 
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Error al cambiar la contraseña: ' . $e->getMessage()
+                'message' => 'Error al cambiar la contraseña: '.$e->getMessage(),
             ], 500);
         }
     }

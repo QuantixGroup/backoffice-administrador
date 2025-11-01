@@ -2,29 +2,31 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Schema;
+use Tests\TestCase;
 
 class RecibosFeatureTest extends TestCase
 {
     /** @var \App\Models\User */
     protected $admin;
+
     protected $skipTestsDueToMissingTables = false;
+
     protected function setUp(): void
     {
         parent::setUp();
-        if (!Schema::hasTable((new User())->getTable())) {
+        if (! Schema::hasTable((new User)->getTable())) {
             $this->skipTestsDueToMissingTables = true;
         }
 
-        if (!Schema::hasTable('pagos_mensuales')) {
+        if (! Schema::hasTable('pagos_mensuales')) {
             $this->skipTestsDueToMissingTables = true;
         }
 
-        if (!$this->skipTestsDueToMissingTables) {
+        if (! $this->skipTestsDueToMissingTables) {
             $this->admin = User::updateOrCreate([
                 'cedula' => '99999998',
             ], [
@@ -41,6 +43,7 @@ class RecibosFeatureTest extends TestCase
     {
         if ($this->skipTestsDueToMissingTables) {
             $this->addToAssertionCount(1);
+
             return;
         }
         $id = DB::table('pagos_mensuales')->insertGetId([
@@ -58,7 +61,7 @@ class RecibosFeatureTest extends TestCase
 
         $resp = $this->putJson(route('recibos.actualizar.estado', $id), [
             'estado' => 'aceptado',
-            'observacion' => 'prueba'
+            'observacion' => 'prueba',
         ]);
 
         $resp->assertStatus(200);
@@ -74,6 +77,7 @@ class RecibosFeatureTest extends TestCase
     {
         if ($this->skipTestsDueToMissingTables) {
             $this->addToAssertionCount(1);
+
             return;
         }
         $id = DB::table('pagos_mensuales')->insertGetId([
@@ -97,12 +101,13 @@ class RecibosFeatureTest extends TestCase
     {
         if ($this->skipTestsDueToMissingTables) {
             $this->addToAssertionCount(1);
+
             return;
         }
         $relPath = 'comprobantes/test_recibo_unit.pdf';
-        $fullPath = storage_path('app/public/' . $relPath);
+        $fullPath = storage_path('app/public/'.$relPath);
         @mkdir(dirname($fullPath), 0755, true);
-        file_put_contents($fullPath, "%PDF-TEST%pdf-content%");
+        file_put_contents($fullPath, '%PDF-TEST%pdf-content%');
 
         $id = DB::table('pagos_mensuales')->insertGetId([
             'cedula' => '33334444',
@@ -126,6 +131,7 @@ class RecibosFeatureTest extends TestCase
     {
         if ($this->skipTestsDueToMissingTables) {
             $this->addToAssertionCount(1);
+
             return;
         }
         $this->actingAs($this->admin);
@@ -151,6 +157,7 @@ class RecibosFeatureTest extends TestCase
     {
         if ($this->skipTestsDueToMissingTables) {
             $this->addToAssertionCount(1);
+
             return;
         }
         $this->actingAs($this->admin);

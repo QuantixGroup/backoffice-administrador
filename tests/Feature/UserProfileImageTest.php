@@ -2,26 +2,28 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\Storage;
+use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Hash;
-use App\Models\User;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Storage;
+use Tests\TestCase;
 
 class UserProfileImageTest extends TestCase
 {
     /** @var \App\Models\User */
     protected $admin;
+
     protected $skipTestsDueToMissingTables = false;
+
     protected function setUp(): void
     {
         parent::setUp();
-        if (!Schema::hasTable((new User())->getTable())) {
+        if (! Schema::hasTable((new User)->getTable())) {
             $this->skipTestsDueToMissingTables = true;
         }
 
-        if (!$this->skipTestsDueToMissingTables) {
+        if (! $this->skipTestsDueToMissingTables) {
             $this->admin = User::updateOrCreate([
                 'cedula' => '99999990',
             ], [
@@ -39,6 +41,7 @@ class UserProfileImageTest extends TestCase
     {
         if ($this->skipTestsDueToMissingTables) {
             $this->addToAssertionCount(1);
+
             return;
         }
         $this->actingAs($this->admin);
@@ -53,6 +56,7 @@ class UserProfileImageTest extends TestCase
     {
         if ($this->skipTestsDueToMissingTables) {
             $this->addToAssertionCount(1);
+
             return;
         }
         Storage::fake('public');

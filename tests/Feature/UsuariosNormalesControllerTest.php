@@ -6,8 +6,9 @@ use Illuminate\Support\Facades\Schema;
 
 test('usuarios normales se aprueba socio via JSON crea usuario y devuelve success', function () {
 
-    if (!Schema::hasTable('socios')) {
+    if (! Schema::hasTable('socios')) {
         $this->addToAssertionCount(1);
+
         return;
     }
 
@@ -33,7 +34,7 @@ test('usuarios normales se aprueba socio via JSON crea usuario y devuelve succes
     $response->assertStatus(200);
     $response->assertJsonStructure(['success', 'message']);
 
-    $this->assertDatabaseHas((new UsuariosNormales())->getTable(), [
+    $this->assertDatabaseHas((new UsuariosNormales)->getTable(), [
         'cedula' => $cedula,
     ]);
 });

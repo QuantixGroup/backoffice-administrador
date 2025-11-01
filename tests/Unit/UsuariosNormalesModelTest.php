@@ -3,7 +3,7 @@
 use App\Models\UsuariosNormales;
 
 test('model UsuariosNormales con tabla y atributos fillable esperados', function () {
-    $model = new UsuariosNormales();
+    $model = new UsuariosNormales;
 
     expect($model->getTable())->toBe('users');
 
