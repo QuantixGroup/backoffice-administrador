@@ -34,36 +34,36 @@
                                 <thead>
                                     <tr>
                                         <th>Nombre</th>
-                                        <th>Apellido</th>
                                         <th>Documento</th>
-                                        <th>Fecha de Nacimiento</th>
-                                        <th>Email</th>
-                                        <th>Teléfono</th>
-                                        <th>Departamento</th>
-                                        <th>Situación Laboral</th>
-                                        <th>Ingresos Mensuales</th>
+                                        <th class="d-none d-md-table-cell">Email</th>
+                                        <th class="d-none d-md-table-cell">Teléfono</th>
+                                        <th class="d-none d-lg-table-cell">Fecha de Nacimiento</th>
+                                        <th class="d-none d-lg-table-cell">Departamento</th>
+                                        <th class="d-none d-lg-table-cell">Situación Laboral</th>
+                                        <th class="d-none d-xl-table-cell">Ingresos Mensuales</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php $__empty_1 = true; $__currentLoopData = $sociosPendientes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $socio): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                         <tr class="table-row-selectable" data-cedula="<?php echo e($socio->cedula); ?>">
-                                            <td><?php echo e($socio->nombre ?? 'N/A'); ?></td>
-                                            <td><?php echo e($socio->apellido ?? 'N/A'); ?></td>
+                                            <td><?php echo e($socio->nombre ?? 'N/A'); ?> <?php echo e($socio->apellido ?? ''); ?></td>
                                             <td><?php echo e($socio->cedula ?? 'N/A'); ?></td>
-                                            <td><?php echo e($socio->fecha_nacimiento ? \Carbon\Carbon::parse($socio->fecha_nacimiento)->format('d/m/Y') : 'N/A'); ?>
+                                            <td class="d-none d-md-table-cell"><?php echo e($socio->email ?? 'N/A'); ?></td>
+                                            <td class="d-none d-md-table-cell"><?php echo e($socio->telefono ?? 'N/A'); ?></td>
+                                            <td class="d-none d-lg-table-cell">
+                                                <?php echo e($socio->fecha_nacimiento ? \Carbon\Carbon::parse($socio->fecha_nacimiento)->format('d/m/Y') : 'N/A'); ?>
 
                                             </td>
-                                            <td><?php echo e($socio->email ?? 'N/A'); ?></td>
-                                            <td><?php echo e($socio->telefono ?? 'N/A'); ?></td>
-                                            <td><?php echo e($socio->departamento ?? 'N/A'); ?></td>
-                                            <td><?php echo e($socio->situacion_laboral ?? 'N/A'); ?></td>
-                                            <td><?php echo e($socio->ingresos_mensuales ? '$' . number_format($socio->ingresos_mensuales, 0, ',', '.') : 'N/A'); ?>
+                                            <td class="d-none d-lg-table-cell"><?php echo e($socio->departamento ?? 'N/A'); ?></td>
+                                            <td class="d-none d-lg-table-cell"><?php echo e($socio->situacion_laboral ?? 'N/A'); ?></td>
+                                            <td class="d-none d-xl-table-cell">
+                                                <?php echo e($socio->ingresos_mensuales ? '$' . number_format($socio->ingresos_mensuales, 0, ',', '.') : 'N/A'); ?>
 
                                             </td>
                                         </tr>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                         <tr>
-                                            <td colspan="9" class="text-center text-muted py-4">
+                                            <td colspan="8" class="text-center text-muted py-4">
                                                 No hay usuarios pendientes de aprobación
                                             </td>
                                         </tr>

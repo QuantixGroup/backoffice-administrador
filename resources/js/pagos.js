@@ -63,10 +63,7 @@ function initRecibosEstadoManager() {
                         method: "PUT",
                         headers: {
                             "Content-Type": "application/json",
-                            "X-CSRF-TOKEN":
-                                document.querySelector(
-                                    'meta[name="csrf-token"]'
-                                )?.content || "",
+                            "X-CSRF-TOKEN": getCsrfToken(),
                         },
                         body: JSON.stringify({
                             estado: data.nuevoEstado,

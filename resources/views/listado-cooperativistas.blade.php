@@ -43,11 +43,10 @@
                                 <thead>
                                     <tr>
                                         <th>Nombre</th>
-                                        <th>Apellido</th>
                                         <th>Documento</th>
-                                        <th>Teléfono</th>
-                                        <th>Email</th>
-                                        <th>Fecha de Aprobación</th>
+                                        <th class="d-none d-md-table-cell">Teléfono</th>
+                                        <th class="d-none d-lg-table-cell">Email</th>
+                                        <th class="d-none d-lg-table-cell">Fecha de Aprobación</th>
                                         <th>Horas Trabajadas</th>
                                         <th>Estado de Pago</th>
                                     </tr>
@@ -55,12 +54,12 @@
                                 <tbody>
                                     @forelse($sociosAprobados as $socio)
                                         <tr class="table-row-selectable" data-cedula="{{ $socio->cedula }}">
-                                            <td>{{ $socio->nombre ?? 'N/A' }}</td>
-                                            <td>{{ $socio->apellido ?? 'N/A' }}</td>
+                                            <td>{{ $socio->nombre ?? 'N/A' }} {{ $socio->apellido ?? '' }}</td>
                                             <td>{{ $socio->cedula ?? 'N/A' }}</td>
-                                            <td>{{ $socio->telefono ?? 'N/A' }}</td>
-                                            <td>{{ $socio->email ?? 'N/A' }}</td>
-                                            <td>{{ $socio->updated_at ? $socio->updated_at->format('d/m/Y H:i') : 'N/A' }}
+                                            <td class="d-none d-md-table-cell">{{ $socio->telefono ?? 'N/A' }}</td>
+                                            <td class="d-none d-lg-table-cell">{{ $socio->email ?? 'N/A' }}</td>
+                                            <td class="d-none d-lg-table-cell">
+                                                {{ $socio->updated_at ? $socio->updated_at->format('d/m/Y H:i') : 'N/A' }}
                                             </td>
                                             <td>
                                                 {!! $socio->horas_trabajadas_badge !!}
@@ -71,7 +70,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="8" class="text-center text-muted py-4">
+                                            <td colspan="7" class="text-center text-muted py-4">
                                                 No hay cooperativistas aprobados aún
                                             </td>
                                         </tr>

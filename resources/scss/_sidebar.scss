@@ -70,7 +70,7 @@
     color: $text-color-secondary;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1200px) {
     .sidebar {
         position: fixed;
         left: 0;
@@ -85,6 +85,10 @@
 
     .sidebar.open {
         transform: translateX(0);
+        -webkit-transform: translateX(0);
+        -moz-transform: translateX(0);
+        -ms-transform: translateX(0);
+        -o-transform: translateX(0);
     }
 
     .logo-section img {
@@ -93,7 +97,6 @@
 
     .logo-sidebar {
         font-size: 1.2rem;
-
     }
 
     #sidebarHamburger {
@@ -105,7 +108,7 @@
     }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 576px) {
     .sidebar {
         width: 240px;
     }
@@ -133,7 +136,7 @@
     display: block;
 }
 
-@media (min-width: 769px) {
+@media (min-width: 1200px) {
     #sidebarHamburger {
         display: none;
     }

@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').content,
+                    "X-CSRF-TOKEN": getCsrfToken(),
                 },
                 body: JSON.stringify({ estado, observacion }),
             });

@@ -43,14 +43,11 @@ async function deleteUser() {
     hideDeleteModal();
 
     try {
-        const token = document
-            .querySelector('meta[name="csrf-token"]')
-            .getAttribute("content");
         const res = await fetch(action, {
             method: "POST",
             credentials: "same-origin",
             headers: {
-                "X-CSRF-TOKEN": token,
+                "X-CSRF-TOKEN": getCsrfToken(),
                 Accept: "application/json",
                 "X-Requested-With": "XMLHttpRequest",
             },
@@ -86,14 +83,11 @@ async function deleteUser() {
 
 async function refreshSociosTbody() {
     try {
-        const token = document
-            .querySelector('meta[name="csrf-token"]')
-            .getAttribute("content");
         const res = await fetch("/socios/aprobados", {
             method: "GET",
             credentials: "same-origin",
             headers: {
-                "X-CSRF-TOKEN": token,
+                "X-CSRF-TOKEN": getCsrfToken(),
                 Accept: "text/html",
             },
         });

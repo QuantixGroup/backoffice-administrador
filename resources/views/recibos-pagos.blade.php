@@ -23,10 +23,9 @@
                             <thead>
                                 <tr>
                                     <th>Nombre</th>
-                                    <th>Apellido</th>
                                     <th>Documento</th>
-                                    <th>Teléfono</th>
-                                    <th>Email</th>
+                                    <th class="d-none d-md-table-cell">Teléfono</th>
+                                    <th class="d-none d-lg-table-cell">Email</th>
                                     <th>Horas Trabajadas</th>
                                     <th>Estado de Pago</th>
                                 </tr>
@@ -34,11 +33,10 @@
                             <tbody>
                                 @forelse($sociosAprobados as $socio)
                                     <tr class="table-row-selectable" data-cooperativista="{{ $socio->cedula ?? 'N/A' }}">
-                                        <td>{{ $socio->nombre ?? 'N/A' }}</td>
-                                        <td>{{ $socio->apellido ?? 'N/A' }}</td>
+                                        <td>{{ $socio->nombre ?? 'N/A' }} {{ $socio->apellido ?? '' }}</td>
                                         <td>{{ $socio->cedula ?? 'N/A' }}</td>
-                                        <td>{{ $socio->telefono ?? 'N/A' }}</td>
-                                        <td>{{ $socio->email ?? 'N/A' }}</td>
+                                        <td class="d-none d-md-table-cell">{{ $socio->telefono ?? 'N/A' }}</td>
+                                        <td class="d-none d-lg-table-cell">{{ $socio->email ?? 'N/A' }}</td>
                                         <td>
                                             {!! $socio->horas_trabajadas_badge !!}
                                         </td>
@@ -48,7 +46,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="7" class="text-center">No hay cooperativistas aprobados</td>
+                                        <td colspan="6" class="text-center">No hay cooperativistas aprobados</td>
                                     </tr>
                                 @endforelse
                             </tbody>

@@ -34,34 +34,34 @@
                                 <thead>
                                     <tr>
                                         <th>Nombre</th>
-                                        <th>Apellido</th>
                                         <th>Documento</th>
-                                        <th>Fecha de Nacimiento</th>
-                                        <th>Email</th>
-                                        <th>Teléfono</th>
-                                        <th>Departamento</th>
-                                        <th>Situación Laboral</th>
-                                        <th>Ingresos Mensuales</th>
+                                        <th class="d-none d-md-table-cell">Email</th>
+                                        <th class="d-none d-md-table-cell">Teléfono</th>
+                                        <th class="d-none d-lg-table-cell">Fecha de Nacimiento</th>
+                                        <th class="d-none d-lg-table-cell">Departamento</th>
+                                        <th class="d-none d-lg-table-cell">Situación Laboral</th>
+                                        <th class="d-none d-xl-table-cell">Ingresos Mensuales</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @forelse($sociosPendientes as $socio)
                                         <tr class="table-row-selectable" data-cedula="{{ $socio->cedula }}">
-                                            <td>{{ $socio->nombre ?? 'N/A' }}</td>
-                                            <td>{{ $socio->apellido ?? 'N/A' }}</td>
+                                            <td>{{ $socio->nombre ?? 'N/A' }} {{ $socio->apellido ?? '' }}</td>
                                             <td>{{ $socio->cedula ?? 'N/A' }}</td>
-                                            <td>{{ $socio->fecha_nacimiento ? \Carbon\Carbon::parse($socio->fecha_nacimiento)->format('d/m/Y') : 'N/A' }}
+                                            <td class="d-none d-md-table-cell">{{ $socio->email ?? 'N/A' }}</td>
+                                            <td class="d-none d-md-table-cell">{{ $socio->telefono ?? 'N/A' }}</td>
+                                            <td class="d-none d-lg-table-cell">
+                                                {{ $socio->fecha_nacimiento ? \Carbon\Carbon::parse($socio->fecha_nacimiento)->format('d/m/Y') : 'N/A' }}
                                             </td>
-                                            <td>{{ $socio->email ?? 'N/A' }}</td>
-                                            <td>{{ $socio->telefono ?? 'N/A' }}</td>
-                                            <td>{{ $socio->departamento ?? 'N/A' }}</td>
-                                            <td>{{ $socio->situacion_laboral ?? 'N/A' }}</td>
-                                            <td>{{ $socio->ingresos_mensuales ? '$' . number_format($socio->ingresos_mensuales, 0, ',', '.') : 'N/A' }}
+                                            <td class="d-none d-lg-table-cell">{{ $socio->departamento ?? 'N/A' }}</td>
+                                            <td class="d-none d-lg-table-cell">{{ $socio->situacion_laboral ?? 'N/A' }}</td>
+                                            <td class="d-none d-xl-table-cell">
+                                                {{ $socio->ingresos_mensuales ? '$' . number_format($socio->ingresos_mensuales, 0, ',', '.') : 'N/A' }}
                                             </td>
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="9" class="text-center text-muted py-4">
+                                            <td colspan="8" class="text-center text-muted py-4">
                                                 No hay usuarios pendientes de aprobación
                                             </td>
                                         </tr>
