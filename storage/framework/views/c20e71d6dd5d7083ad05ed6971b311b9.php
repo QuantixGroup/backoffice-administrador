@@ -18,6 +18,7 @@
                         <i class="fas fa-shield-alt me-2 text-warning alert-icon"></i>
                         <div class="alert-text">
                             <strong>Primer inicio:</strong> Por seguridad, cambia tu contraseña en este formulario.
+                            <div class="small text-muted mt-1">La contraseña debe tener mínimo 8 caracteres.</div>
                         </div>
                     </div>
                 </div>
@@ -25,6 +26,10 @@
             <div class="row">
                 <div class="col-12">
                     <h2 class="mb-4 mt-4 text-center">Cambiar Contraseña</h2>
+                    <div class="text-center mb-3">
+                        <span class="text-muted"><i class="fas fa-info-circle me-1"></i>La contraseña debe tener mínimo
+                            8 caracteres</span>
+                    </div>
                 </div>
             </div>
 

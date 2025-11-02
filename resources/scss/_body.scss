@@ -94,48 +94,46 @@ body.dark .table tbody tr {
     @include table-row-selectable;
 }
 
-@media (max-width: 768px) {
+.table-responsive {
+    overflow-x: visible;
+}
+
+@media (max-width: 1200px) {
     .main-content {
         margin-left: 0;
         padding: 1rem;
     }
+}
 
+@media (max-width: 768px) {
     .table {
-        display: block;
-        width: calc(100% - 2rem);
-        margin: 0 auto;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
+        font-size: 0.875rem;
     }
 
     .table th,
     .table td {
-        white-space: nowrap;
+        padding: 0.5rem 0.25rem;
+        vertical-align: middle;
     }
 
     .table-header h2 {
         font-size: 1.25rem;
     }
-
 }
 
-@media (max-width: 480px) {
+@media (max-width: 576px) {
     .main-content {
         margin-left: 0;
         padding: 0.5rem;
     }
 
     .table {
-        display: block;
-        width: calc(100% - 1rem);
-        margin: 0 auto;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
+        font-size: 0.75rem;
     }
 
     .table th,
     .table td {
-        white-space: nowrap;
+        padding: 0.4rem 0.2rem;
     }
 
     .table-header {
@@ -145,5 +143,10 @@ body.dark .table tbody tr {
 
     .table-header h2 {
         font-size: 1rem;
+    }
+
+    .badge {
+        font-size: 0.65rem;
+        padding: 0.25rem 0.4rem;
     }
 }

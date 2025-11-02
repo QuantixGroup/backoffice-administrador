@@ -41,23 +41,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-function togglePassword() {
-    const passwordInput = document.getElementById("password");
-    const toggleIcon = document.getElementById("toggleIcon");
-
-    if (passwordInput.type === "password") {
-        passwordInput.type = "text";
-        toggleIcon.classList.remove("fa-eye-slash");
-        toggleIcon.classList.add("fa-eye");
-    } else {
-        passwordInput.type = "password";
-        toggleIcon.classList.remove("fa-eye");
-        toggleIcon.classList.add("fa-eye-slash");
-    }
-}
-
-window.togglePassword = togglePassword;
-
 function showForgotPasswordModal() {
     const el = document.getElementById("forgotPasswordModal");
     if (el) new bootstrap.Modal(el).show();
@@ -102,6 +85,7 @@ function addLoginEffects() {
     const cedulaInput = document.getElementById("cedula");
     const passwordInput = document.getElementById("password");
     const inputs = [cedulaInput, passwordInput].filter(Boolean);
+
     inputs.forEach((input) => {
         input.addEventListener("focus", function () {
             if (this.parentElement)
@@ -114,14 +98,7 @@ function addLoginEffects() {
         });
     });
 
-    if (cedulaInput) {
-        cedulaInput.addEventListener("input", function () {
-            this.value = this.value.replace(/[^0-9]/g, "");
-            if (this.value.length > 8) {
-                this.value = this.value.substring(0, 8);
-            }
-        });
-    }
+    setupCedulaValidation("cedula");
 }
 
 document.addEventListener("DOMContentLoaded", addLoginEffects);

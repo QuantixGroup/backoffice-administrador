@@ -13,11 +13,15 @@ h2 {
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1200px) {
+    h2 {
+        text-align: center;
+    }
+}
 
+@media (max-width: 768px) {
     h2 {
         font-size: 1rem;
-        text-align: center;
     }
 }
 
@@ -125,6 +129,11 @@ h2 {
 body.dark #darkModeFloatingToggle {
     background-color: $bg-color-tertiary;
     color: $text-color-primary;
+}
+
+html[data-bs-theme="dark"] .text-muted,
+body.dark .text-muted {
+    color: $text-color-primary-dark !important;
 }
 
 .badge {

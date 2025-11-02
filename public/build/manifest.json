@@ -4,19 +4,19 @@
     "src": "public/img/fondoContruccion.avif"
   },
   "resources/js/app.js": {
-    "file": "assets/app-UIuWB3E6.js",
+    "file": "assets/app-D4KWkiRL.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true
   },
   "resources/js/recibo-pago.js": {
-    "file": "assets/recibo-pago-BbTxSD0y.js",
+    "file": "assets/recibo-pago-Bpw6Ka5Z.js",
     "name": "recibo-pago",
     "src": "resources/js/recibo-pago.js",
     "isEntry": true
   },
   "resources/scss/app.scss": {
-    "file": "assets/app-B1sGnqT0.css",
+    "file": "assets/app-DXLRWlRj.css",
     "src": "resources/scss/app.scss",
     "isEntry": true
   }

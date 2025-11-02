@@ -13,6 +13,17 @@ class UserController extends Controller
 {
     public function login(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'cedula' => 'required',
+            'password' => 'required|min:8',
+        ], [
+            'password.min' => 'La contraseña debe tener al menos 8 caracteres',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect('/login')->withErrors($validator)->withInput();
+        }
+
         $credenciales = $request->only(['cedula', 'password']);
 
         if (Auth::attempt($credenciales)) {
@@ -24,7 +35,7 @@ class UserController extends Controller
 
             return redirect()->route('home');
         } else {
-            return redirect('/login')->with(['error' => 'Credenciales incorrectas']);
+            return redirect('/login')->withErrors(['error' => 'Contraseña incorrecta']);
         }
     }
 
@@ -80,7 +91,7 @@ class UserController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Error al actualizar el perfil: '.$e->getMessage(),
+                'message' => 'Error al actualizar el perfil: ' . $e->getMessage(),
             ], 500);
         }
     }
@@ -116,7 +127,7 @@ class UserController extends Controller
                 return response()->json([
                     'success' => true,
                     'message' => 'Imagen de perfil actualizada correctamente',
-                    'image_url' => asset('storage/'.$imagePath),
+                    'image_url' => asset('storage/' . $imagePath),
                 ]);
             }
 
@@ -128,7 +139,7 @@ class UserController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Error al subir la imagen: '.$e->getMessage(),
+                'message' => 'Error al subir la imagen: ' . $e->getMessage(),
             ], 500);
         }
     }
@@ -136,7 +147,7 @@ class UserController extends Controller
     public function showProfile()
     {
         $user = Auth::user();
-        $profileImageUrl = $user->profile_image ? asset('storage/'.$user->profile_image) : asset('img/admin-profile.jpg');
+        $profileImageUrl = $user->profile_image ? asset('storage/' . $user->profile_image) : asset('img/admin-profile.jpg');
 
         return view('perfil', [
             'user' => $user,
@@ -147,7 +158,7 @@ class UserController extends Controller
     public function mostrarCambiarPassword()
     {
         $user = Auth::user();
-        $profileImageUrl = $user->profile_image ? asset('storage/'.$user->profile_image) : asset('img/admin-profile.jpg');
+        $profileImageUrl = $user->profile_image ? asset('storage/' . $user->profile_image) : asset('img/admin-profile.jpg');
 
         return view('cambiar_password', [
             'user' => $user,
@@ -164,7 +175,7 @@ class UserController extends Controller
         ], [
             'current_password.required' => 'La contraseña actual es obligatoria',
             'new_password.required' => 'La nueva contraseña es obligatoria',
-            'new_password.min' => 'La nueva contraseña debe tener al menos 8 caracteres',
+            'new_password.min' => 'La nueva contraseña debe tener minimo 8 caracteres',
             'confirm_new_password.required' => 'Debes confirmar la nueva contraseña',
             'confirm_new_password.same' => 'Las contraseñas no coinciden',
         ]);
@@ -180,7 +191,7 @@ class UserController extends Controller
         try {
             $user = Auth::user();
 
-            if (! Hash::check($request->current_password, $user->password)) {
+            if (!Hash::check($request->current_password, $user->password)) {
                 return response()->json([
                     'success' => false,
                     'message' => 'La contraseña actual es incorrecta',
@@ -205,7 +216,7 @@ class UserController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Error al cambiar la contraseña: '.$e->getMessage(),
+                'message' => 'Error al cambiar la contraseña: ' . $e->getMessage(),
             ], 500);
         }
     }

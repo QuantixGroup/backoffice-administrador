@@ -41,9 +41,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 thumbnailWidth: 200,
                 thumbnailHeight: 200,
                 headers: {
-                    "X-CSRF-TOKEN": document
-                        .querySelector('meta[name="csrf-token"]')
-                        .getAttribute("content"),
+                    "X-CSRF-TOKEN": getCsrfToken(),
                 },
                 init: function () {
                     const dzInstance = this;
@@ -204,9 +202,7 @@ document.addEventListener("DOMContentLoaded", function () {
             fetch("/perfil/update", {
                 method: "POST",
                 headers: {
-                    "X-CSRF-TOKEN": document
-                        .querySelector('meta[name="csrf-token"]')
-                        .getAttribute("content"),
+                    "X-CSRF-TOKEN": getCsrfToken(),
                 },
                 body: formData,
             })
@@ -243,71 +239,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-    const toggles = document.querySelectorAll(".toggle-password");
-
-    toggles.forEach((btn) => {
-        btn.addEventListener("click", function (e) {
-            const targetSelector = btn.getAttribute("data-target");
-            if (!targetSelector) return;
-            const input = document.querySelector(targetSelector);
-            if (!input) return;
-
-            if (input.type === "password") {
-                input.type = "text";
-                const icon = btn.querySelector("i");
-                if (icon) {
-                    icon.classList.remove("fa-eye");
-                    icon.classList.add("fa-eye-slash");
-                }
-                btn.setAttribute("aria-label", "Ocultar contraseña");
-            } else {
-                input.type = "password";
-                const icon = btn.querySelector("i");
-                if (icon) {
-                    icon.classList.remove("fa-eye-slash");
-                    icon.classList.add("fa-eye");
-                }
-                btn.setAttribute("aria-label", "Mostrar contraseña");
-            }
-        });
-    });
-});
-
-function showNotification(message, type) {
-    const notification = document.createElement("div");
-    notification.className = "success-notification";
-
-    notification.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background-color: #28a745;
-        color: white;
-        padding: 1rem 1.5rem;
-        border-radius: 0.375rem;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        z-index: 1060;
-        display: flex;
-        align-items: center;
-        min-width: 300px;
-        animation: slideInRight 0.3s ease-out;
-    `;
-
-    notification.innerHTML = `
-        <i class="fas fa-check-circle" style="margin-right: 0.5rem; font-size: 1.2rem;"></i>
-        <span>${message}</span>
-    `;
-
-    document.body.appendChild(notification);
-
-    setTimeout(() => {
-        if (notification.parentNode) {
-            notification.remove();
-        }
-    }, 4000);
-}
-
-document.addEventListener("DOMContentLoaded", function () {
     const changePasswordForm = document.getElementById("change-password-form");
 
     if (changePasswordForm) {
@@ -324,6 +255,22 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
+            if (newPassword.value.length > 0 && newPassword.value.length < 8) {
+                showNotification(
+                    "La nueva contraseña debe tener al menos 8 caracteres",
+                    "danger"
+                );
+                return;
+            }
+
+            if (newPassword.value !== confirmNewPassword.value) {
+                showNotification(
+                    "Las nuevas contraseñas no coinciden",
+                    "danger"
+                );
+                return;
+            }
+
             const formData = new FormData();
             formData.append("current_password", currentPassword.value);
             formData.append("new_password", newPassword.value);
@@ -333,9 +280,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const response = await fetch("/perfil/cambiar-password", {
                     method: "POST",
                     headers: {
-                        "X-CSRF-TOKEN": document
-                            .querySelector('meta[name="csrf-token"]')
-                            .getAttribute("content"),
+                        "X-CSRF-TOKEN": getCsrfToken(),
                         Accept: "application/json",
                     },
                     body: formData,
@@ -343,7 +288,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 const data = await response.json();
 
-                if (data.success) {
+                if (await handleFetchError(response, data)) {
+                    return;
+                }
+
+                if (response.ok && data.success) {
                     showNotification(
                         "Contraseña actualizada correctamente",
                         "success"
@@ -352,12 +301,13 @@ document.addEventListener("DOMContentLoaded", function () {
                     setTimeout(() => {
                         window.location.href = "/";
                     }, 1200);
-                } else {
-                    showNotification(
-                        data.message || "Error al cambiar la contraseña",
-                        "danger"
-                    );
+                    return;
                 }
+
+                showNotification(
+                    data.message || "Error al cambiar la contraseña",
+                    "danger"
+                );
             } catch (error) {
                 showNotification(
                     "Error de conexión al cambiar la contraseña",
