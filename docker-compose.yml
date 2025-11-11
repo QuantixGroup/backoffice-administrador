@@ -1,0 +1,21 @@
+version: "3.8"
+services:
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        image: proyecto/backoffice-administrador:dev
+        container_name: backoffice_app
+        env_file:
+            - .env
+        ports:
+            - "8002:80"
+        volumes:
+            - ./:/var/www/html:cached
+        networks:
+            - backend
+
+networks:
+    backend:
+        driver: bridge
+
